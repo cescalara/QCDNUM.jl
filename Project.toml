@@ -1,0 +1,13 @@
+name = "QCDNUM"
+uuid = "4acc4d78-9ad5-435b-99b1-7af0628e6e5b"
+authors = ["Francesca Capel <capel.francesca@gmail.com> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
