@@ -2,8 +2,6 @@ module QCDNUM
 
 using Libdl
 
-qcdnum = Libdl.dlopen("/usr/local/lib/libQCDNUM.dylib")
-
 
 """
     qcinit(lun, filename)
@@ -18,6 +16,8 @@ the QCDNUM banner printout is suppressed.
 """
 function qcinit(lun::Integer, output_file::String)
 
+    qcdnum = Libdl.dlopen("/usr/local/lib/libQCDNUM.dylib")
+    
     lun = Ref{Int32}(lun)
  
     @ccall qcinit_(lun::Ref{Int32}, output_file::Cstring)::Nothing
