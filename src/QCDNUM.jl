@@ -476,6 +476,10 @@ is replaced with:
 evolution type. Entries can be (+1, -1, +-2) corresponding to 
 singlet, valence non-singlet and +/- q_ns singlets respectively. 
 - `n::Integer`: Number of singlet/non-singlet pdfs to evolve 
+
+# Returns
+- `epsi::Float64`: Maximum deviation of the quadratic spline from 
+linear interpolation mid-between the grid points.
 """
 function evsgns(itype::Integer, func, isns::Array{Int32,1}, n::Integer, iq0::Integer)
 
@@ -488,6 +492,66 @@ function evsgns(itype::Integer, func, isns::Array{Int32,1}, n::Integer, iq0::Int
                    n::Ref{Int32}, iq0::Ref{Int32}, epsi::Ref{Float64})::Nothing
 
     epsi[]
+end
+
+"""
+    usrpdf(fun, iset, n, offset)
+
+Create a user-defined type-5 pdfset (same type as the output 
+of evsgns). 
+
+# Arguments
+- `fun`: User-defined function with the signature 
+fun(ipdf::Integer, x::Float64, qq::Float64, first::UInt8)::Float64
+specifying the values at x and qq of pdfset ipdf.
+- `iset::Integer`: Pdfset identifier, between 1 and 24.
+- `n::Integer`: Number of pdf tables in addition to gluon tables.
+- `offset::Float64`: Relative offset at the thresholds mu_h^2, used 
+to catch matching discontinuities.
+
+# Returns
+- `epsi::Float64`: Maximum deviation of the quadratic spline from 
+linear interpolation mid-between the grid points.
+"""
+function usrpdf(fun, iset::Integer, n::Integer, offset::Float64)
+
+    iset = Ref{Int32}(iset)
+    n = Ref{Int32}(n)
+    offset = Ref{Float64}(offset)
+    epsi = Ref{Float64}()
+    
+    @ccall usrpdf_(fun::Ptr{Cvoid}, iset::Ref{Int32}, n::Ref{Int32}, 
+        offset::Ref{Float64}, epsi::Ref{Float64})::Nothing
+    
+    epsi[]
+end
+
+"""
+    nptabs(iset)
+
+Get the number of pdf tables in set `iset::Integer`.
+"""
+function nptabs(iset::Integer)
+
+    iset = Ref{Int32}(iset)
+    
+    ntabs = @ccall nptabs_(iset::Ref{Int32})::Int32
+
+    ntabs[]
+end
+
+"""
+    ievtype(iset)
+
+Get the pdf evolution type for set `iset::Integer`.
+"""
+function ievtyp(iset::Integer)
+
+    iset = Ref{Int32}(iset)
+    
+    ityp = @ccall ievtyp_(iset::Ref{Int32})::Int32
+
+    ityp[]
 end
 
 """
