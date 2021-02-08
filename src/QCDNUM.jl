@@ -624,6 +624,37 @@ function bvalij(iset::Integer, id::Integer, ix::Integer, iq::Integer, ichk::Inte
 end
 
 """
+    bvalxq(iset, id, x, qq, ichk)
+
+Get the value of a pdf at a given point (`x`, `qq`).
+
+# Arguments
+- `iset::Integer`: pdf set id (1-24)
+- `id::Integer`: basis pdf identifier from 0 to 12+n, 
+where n is the number of additional pdfs in iset.
+- `x::Float64`: x value.
+- `qq::Float64`: qq value.
+- `ichk::Integer`: flag to steer error checking. 
+See allfxq().
+
+# Returns
+- `pdf::Float64`: pdf values.
+"""
+function bvalxq(iset::Integer, id::Integer, x::Float64, qq::Float64, ichk::Integer)
+
+    iset = Ref{Int32}(iset)
+    id = Ref{Int32}(id)
+    x = Ref{Float64}(x)
+    q = Ref{Float64}(qq)
+    ichk = Ref{Int32}(ichk)
+
+    pdf = @ccall bvalxq_(iset::Ref{Int32}, id::Ref{Int32}, x::Ref{Float64},
+                         qq::Ref{Float64}, ichk::Ref{Int32})::Float64
+
+    pdf[]
+end
+
+"""
     zmfillw()
 
 Fill weight tables for zero-mass structure function 
