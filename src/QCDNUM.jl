@@ -495,6 +495,25 @@ function evsgns(itype::Integer, func, isns::Array{Int32,1}, n::Integer, iq0::Int
 end
 
 """
+    evsgnsp(itype, func, isns, n, iq0)
+
+Prototype parallel version on evsgns.
+"""
+function evsgnsp(itype::Integer, func, isns::Array{Int32,1}, n::Integer, iq0::Integer, jrun::Integer)
+
+    itype = Ref{Int32}(itype)
+    n = Ref{Int32}(n)
+    iq0 = Ref{Int32}(iq0)
+    jrun = Ref{Int32}(jrun)
+    epsi = Ref{Float64}()
+    
+    @ccall evsgnsp_(itype::Ref{Int32}, func::Ptr{Cvoid}, isns::Ref{Int32},
+                   n::Ref{Int32}, iq0::Ref{Int32}, epsi::Ref{Float64}, jrun::Ref{Int32})::Nothing
+
+    epsi[]
+end
+
+"""
     usrpdf(fun, iset, n, offset)
 
 Create a user-defined type-5 pdfset (same type as the output 
