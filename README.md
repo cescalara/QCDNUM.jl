@@ -11,7 +11,3 @@ Install from GitHub in Julia's [Pkg REPL](https://docs.julialang.org/en/v1.6/std
 ```
 pkg> add https://github.com/cescalara/QCDNUM.jl.git
 ```
-
-## Notes
-
-Not currently working with Julia 1.6. Update coming soon.
