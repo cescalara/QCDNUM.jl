@@ -215,6 +215,22 @@ qqarray = QCDNUM.ssp_vnodes(iasp, nv, nv);
 QCDNUM.ssp_nprint(iasp)
 ```
 
+There are routines to evaluate the function and its integral at desired x and qq values/ranges.
+
+```julia
+x = 0.1
+q = 100.0
+QCDNUM.dsp_funs2(iasp, x, q, 1)
+```
+
+```julia
+x1 = 0.01
+x2 = 0.1
+q1 = 10.0
+q2 = 100.0
+QCDNUM.dsp_ints2(iasp, x1, x2, q1, q2)
+```
+
 It is also possible to set user nodes, if the automatically chosen ones are not satisfactory.
 
 ```julia
@@ -230,6 +246,4 @@ iasp = QCDNUM.isp_s2user(xarr, nx, qarr, nq)
 QCDNUM.ssp_nprint(iasp)
 ```
 
-```julia
 
-```

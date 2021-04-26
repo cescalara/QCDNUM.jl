@@ -399,3 +399,154 @@ function ssp_nprint(ia::Integer)
 
     nothing
 end
+
+
+"""
+    ssp_extrapu(ia, n)
+
+Define the extrapolation at the kinematic
+limit for a spline at address `ia`.
+
+The extrapolation index `n` can be:
+- `0`: constant
+- `1`: linear
+- `2`: quadratic
+- `3`: cubic
+"""
+function ssp_extrapu(ia, n)
+
+    ia = Ref{Int32}(ia)
+    n = Ref{Int32}(n)
+
+    @ccall ssp_extrapu_(ia::Ref{Int32}, n::Ref{Int32})::Nothing
+
+    nothing
+end
+
+"""
+    ssp_extrapv(ia, n)
+
+Define the extrapolation at the kinematic
+limit for a spline at address `ia`.
+
+The extrapolation index `n` can be:
+- `0`: constant
+- `1`: linear
+- `2`: quadratic
+- `3`: cubic
+"""
+function ssp_extrapv(ia, n)
+
+    ia = Ref{Int32}(ia)
+    n = Ref{Int32}(n)
+
+    @ccall ssp_extrapv_(ia::Ref{Int32}, n::Ref{Int32})::Nothing
+
+    nothing
+end
+
+
+"""
+    dsp_funs1(ia, u, ichk)
+
+Evaluate function for 1D spline.
+
+Possible values of `ichk`:
+- `-1`: extrapolate the spline
+- `0`: return 0
+- `1`: throw an error message
+
+# Arguments
+- `ia::Integer`: address of spline
+- `u::Float64`: x or qq
+- `ichk::Integer`: defines behaviour when outside 
+spline range
+"""
+function dsp_funs1(ia::Integer, u::Float64, ichk::Integer)
+
+    ia = Ref{Int32}(ia)
+    u = Ref{Float64}(u)
+    ichk = Ref{Int32}(ichk)
+
+    val = @ccall dsp_funs1_(ia::Ref{Int32}, u::Ref{Float64},
+                            ichk::Ref{Int32})::Float64
+
+    val[]
+end
+
+
+"""
+    dsp_funs2(ia, x, q, ichk)
+
+Evaluate function for 2D spline.
+
+Possible values of `ichk`:
+- `-1`: extrapolate the spline
+- `0`: return 0
+- `1`: throw an error message
+
+# Arguments
+- `ia::Integer`: address of spline
+- `x::Float64`: x value
+- `q::Float64`: qq value
+- `ichk::Integer`: defines behaviour when outside 
+spline range
+"""
+function dsp_funs2(ia::Integer, x::Float64, q::Float64, ichk::Integer)
+
+    ia = Ref{Int32}(ia)
+    x = Ref{Float64}(x)
+    q = Ref{Float64}(q)
+    ichk = Ref{Int32}(ichk)
+
+    val = @ccall dsp_funs2_(ia::Ref{Int32}, x::Ref{Float64},
+                            q::Ref{Float64}, ichk::Ref{Int32})::Float64
+
+    val[]
+end
+
+
+"""
+    dsp_ints1(ia, u1, u2)
+
+Evaluate integral of spline between u1 and u2.
+
+The integration limits must lie inside the 
+spline range. 
+"""
+function dsp_ints1(ia::Integer, u1::Float64, u2::Float64)
+
+    ia = Ref{Int32}(ia)
+    u1 = Ref{Float64}(u1)
+    u2 = Ref{Float64}(u2)
+
+    val = @ccall dsp_ints1_(ia::Ref{Int32}, u1::Ref{Float64},
+                            u2::Ref{Float64})::Float64
+
+    val[]
+end
+
+
+"""
+    dsp_ints2(ia, x1, x2, q1, q2)
+
+Evaluate integral of spline between x1, x2, q1 and q2.
+
+The integration limits must lie inside the 
+spline range.
+"""
+function dsp_ints2(ia::Integer, x1::Float64, x2::Float64,
+                   q1::Float64, q2::Float64)
+
+    ia = Ref{Int32}(ia)
+    x1 = Ref{Float64}(x1)
+    x2 = Ref{Float64}(x2)
+    q1 = Ref{Float64}(q1)
+    q2 = Ref{Float64}(q2)
+
+    val = @ccall dsp_ints2_(ia::Ref{Int32}, x1::Ref{Float64},
+                            x2::Ref{Float64}, q1::Ref{Float64},
+                            q2::Ref{Float64})::Float64
+
+    val[]
+end
