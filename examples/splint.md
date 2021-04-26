@@ -150,11 +150,11 @@ For the SPLINT example, we need a PDF stored and the corresponding `iset` and `i
 
 ```julia
 iset = itype
-ipdf = 1; # component of PDF
+ipdf = 1; # component of PDF, -6 to 6
 ```
 
 ```julia
-QCDNUM.fvalij(iset, ipdf, 1, 1, 1)
+QCDNUM.fvalij(iset, ipdf, 1, 1, 1) # check we get values
 ```
 
 Now that we have run the example program, we can load SPLINT, and write `iset` and `ipdf` to the user space.
@@ -176,11 +176,9 @@ function func(ix, iq, first)::Float64
     
     ix = ix[]
     iq = iq[]
-    
-    if (first)
-        iset = Int32(QCDNUM.dsp_uread(1))
-        ipdf = Int32(QCDNUM.dsp_uread(2))
-    end
+
+    iset = Int32(QCDNUM.dsp_uread(1))
+    ipdf = Int32(QCDNUM.dsp_uread(2))
     
     return QCDNUM.fvalij(iset, ipdf, ix, iq, 1)
 end
@@ -189,6 +187,21 @@ fun = @cfunction(func, Float64, (Ref{Int32}, Ref{Int32}, Ref{UInt8}))
 ```
 
 ```julia
-iasp = Ref{Int32}(iasp)
-@ccall ssp_s2fill_(iasp::Ref{Int32}, fun::Ptr{Cvoid}, rs::Ref{Float64})::Nothing
+# Fill the spline and set no kinematic limit
+QCDNUM.ssp_s2fill(iasp, fun, 0.0)
+```
+
+```julia
+xarr = Float64.([1e-2, 5e-2, 1e-1, 0.5])
+qarr = Float64.([10, 1e2, 1e3, 5e3])
+nx = length(xarr)
+nq = length(qarr);
+```
+
+```julia
+QCDNUM.isp_s2user(xarr, nx, qarr, nq)
+```
+
+```julia
+
 ```
