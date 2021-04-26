@@ -1,5 +1,5 @@
 """
-    qcinit(lun, filename)
+    qcinit(qcdnum_lib, lun, filename)
 
 Initialise QCDNUM - should be called before anything else. 
 
