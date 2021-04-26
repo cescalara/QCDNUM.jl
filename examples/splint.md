@@ -12,14 +12,18 @@ jupyter:
     name: julia-1.6
 ---
 
-## QCDNUM example program
+# SPLINT package example
 
-Based on ``example.f`` detailed [here](https://www.nikhef.nl/~h24/qcdnum-files/testjobs1701/example.f).
+SPLINT is a QCDNUM add-on for converting results computed on the evolution grid to cubic splines. This is convenient for integrating/differentiating these results.
 
 ```julia
 using QCDNUM
 using Printf
 ```
+
+## Example evolution grid
+
+First, we need a QCDNUM evolution grid to work with. For this, we use the QCDNUM example program described in the `example` notebook. 
 
 ```julia
 xmin = Float64.([1.0e-4])
@@ -144,6 +148,102 @@ csea = 2*pdf[3];
 @printf("as(mz2) = %0.4e", asmz)
 ```
 
-```julia
+## SPLINT
 
+
+For the SPLINT example, we need a PDF stored and the corresponding `iset` and `ipdf`. We will use this to input the function to spline. 
+
+```julia
+iset = itype
+ipdf = 1; # component of PDF, -6 to 6
 ```
+
+```julia
+QCDNUM.fvalij(iset, ipdf, 1, 1, 1) # check we get values
+```
+
+Now that we have run the example program, we can load SPLINT, and write `iset` and `ipdf` to the user space.
+
+```julia
+QCDNUM.ssp_spinit(1000)
+QCDNUM.ssp_uwrite(1, Float64(iset))
+QCDNUM.ssp_uwrite(2, Float64(ipdf))
+```
+
+```julia
+# Make spline object
+iasp = QCDNUM.isp_s2make(5, 5)
+```
+
+```julia
+# Define function to read from QCDNUM into spline
+function func(ix, iq, first)::Float64
+    
+    ix = ix[]
+    iq = iq[]
+
+    iset = Int32(QCDNUM.dsp_uread(1))
+    ipdf = Int32(QCDNUM.dsp_uread(2))
+    
+    return QCDNUM.fvalij(iset, ipdf, ix, iq, 1)
+end
+
+fun = @cfunction(func, Float64, (Ref{Int32}, Ref{Int32}, Ref{UInt8}))
+```
+
+```julia
+# Fill the spline and set no kinematic limit
+QCDNUM.ssp_s2fill(iasp, fun, 0.0)
+```
+
+We can use some helper functions to query the spline properties...
+
+```julia
+QCDNUM.isp_splinetype(iasp)
+```
+
+```julia
+nu, u1, u2, nv, v1, v2, n = QCDNUM.ssp_splims(iasp)
+```
+
+... or copy the nodes locally and print a summary.
+
+```julia
+xarray = QCDNUM.ssp_unodes(iasp, nu, nu);
+qqarray = QCDNUM.ssp_vnodes(iasp, nv, nv);
+
+QCDNUM.ssp_nprint(iasp)
+```
+
+There are routines to evaluate the function and its integral at desired x and qq values/ranges.
+
+```julia
+x = 0.1
+q = 100.0
+QCDNUM.dsp_funs2(iasp, x, q, 1)
+```
+
+```julia
+x1 = 0.01
+x2 = 0.1
+q1 = 10.0
+q2 = 100.0
+QCDNUM.dsp_ints2(iasp, x1, x2, q1, q2)
+```
+
+It is also possible to set user nodes, if the automatically chosen ones are not satisfactory.
+
+```julia
+xarr = Float64.([1e-2, 5e-2, 1e-1, 0.5])
+qarr = Float64.([10, 1e2, 1e3, 5e3])
+nx = length(xarr)
+nq = length(qarr)
+
+iasp = QCDNUM.isp_s2user(xarr, nx, qarr, nq)
+```
+
+```julia
+QCDNUM.ssp_nprint(iasp)
+```
+
+

@@ -40,7 +40,7 @@ end
 """
     bvalij(iset, id, ix, iq, ichk)
 
-Get the value of a pdf at a given point (`ix`, `iq`).
+Get the value of a basis pdf at a given point (`ix`, `iq`).
 
 # Arguments
 - `iset::Integer`: pdf set id (1-24)
@@ -71,7 +71,7 @@ end
 """
     bvalxq(iset, id, x, qq, ichk)
 
-Get the value of a pdf at a given point (`x`, `qq`).
+Get the value of a basis pdf at a given point (`x`, `qq`).
 
 # Arguments
 - `iset::Integer`: pdf set id (1-24)
@@ -94,6 +94,70 @@ function bvalxq(iset::Integer, id::Integer, x::Float64, qq::Float64, ichk::Integ
     ichk = Ref{Int32}(ichk)
 
     pdf = @ccall bvalxq_(iset::Ref{Int32}, id::Ref{Int32}, x::Ref{Float64},
+                         qq::Ref{Float64}, ichk::Ref{Int32})::Float64
+
+    pdf[]
+end
+
+"""
+    fvalij(iset, id, ix, iq, ichk)
+
+Get the value of a flavour momentum density 
+at a given point (`ix`, `iq`).
+
+# Arguments
+- `iset::Integer`: pdf set id (1-24)
+- `id::Integer`: basis pdf identifier from -6 to 6+n, 
+where n is the number of additional pdfs in iset.
+- `ix::Integer`: x index.
+- `iq::Intger`: qq index.
+- `ichk::Integer`: flag to steer error checking. 
+See allfxq().
+
+# Returns
+- `pdf::Float64`: pdf values.
+"""
+function fvalij(iset::Integer, id::Integer, ix::Integer, iq::Integer, ichk::Integer)
+
+    iset = Ref{Int32}(iset)
+    id = Ref{Int32}(id)
+    ix = Ref{Int32}(ix)
+    iq = Ref{Int32}(iq)
+    ichk = Ref{Int32}(ichk)
+
+    pdf = @ccall fvalij_(iset::Ref{Int32}, id::Ref{Int32}, ix::Ref{Int32},
+                         iq::Ref{Int32}, ichk::Ref{Int32})::Float64
+
+    pdf[]
+end
+
+"""
+    fvalxq(iset, id, x, qq, ichk)
+
+Get the value of a flavour momentum density
+at a given point (`x`, `qq`).
+
+# Arguments
+- `iset::Integer`: pdf set id (1-24)
+- `id::Integer`: basis pdf identifier from -6 to 6+n, 
+where n is the number of additional pdfs in iset.
+- `x::Float64`: x value.
+- `qq::Float64`: qq value.
+- `ichk::Integer`: flag to steer error checking. 
+See allfxq().
+
+# Returns
+- `pdf::Float64`: pdf values.
+"""
+function fvalxq(iset::Integer, id::Integer, x::Float64, qq::Float64, ichk::Integer)
+
+    iset = Ref{Int32}(iset)
+    id = Ref{Int32}(id)
+    x = Ref{Float64}(x)
+    q = Ref{Float64}(qq)
+    ichk = Ref{Int32}(ichk)
+
+    pdf = @ccall fvalxq_(iset::Ref{Int32}, id::Ref{Int32}, x::Ref{Float64},
                          qq::Ref{Float64}, ichk::Ref{Int32})::Float64
 
     pdf[]
