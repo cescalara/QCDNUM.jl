@@ -12,7 +12,7 @@ jupyter:
     name: julia-1.6
 ---
 
-## SPLINT package example
+# SPLINT package example
 
 SPLINT is a QCDNUM add-on for converting results computed on the evolution grid to cubic splines. This is convenient for integrating/differentiating these results.
 
@@ -20,6 +20,8 @@ SPLINT is a QCDNUM add-on for converting results computed on the evolution grid 
 using QCDNUM
 using Printf
 ```
+
+## Example evolution grid
 
 First, we need a QCDNUM evolution grid to work with. For this, we use the QCDNUM example program described in the `example` notebook. 
 
@@ -146,6 +148,9 @@ csea = 2*pdf[3];
 @printf("as(mz2) = %0.4e", asmz)
 ```
 
+## SPLINT
+
+
 For the SPLINT example, we need a PDF stored and the corresponding `iset` and `ipdf`. We will use this to input the function to spline. 
 
 ```julia
@@ -191,15 +196,38 @@ fun = @cfunction(func, Float64, (Ref{Int32}, Ref{Int32}, Ref{UInt8}))
 QCDNUM.ssp_s2fill(iasp, fun, 0.0)
 ```
 
+We can use some helper functions to query the spline properties...
+
+```julia
+QCDNUM.isp_splinetype(iasp)
+```
+
+```julia
+nu, u1, u2, nv, v1, v2, n = QCDNUM.ssp_splims(iasp)
+```
+
+... or copy the nodes locally and print a summary.
+
+```julia
+xarray = QCDNUM.ssp_unodes(iasp, nu, nu);
+qqarray = QCDNUM.ssp_vnodes(iasp, nv, nv);
+
+QCDNUM.ssp_nprint(iasp)
+```
+
+It is also possible to set user nodes, if the automatically chosen ones are not satisfactory.
+
 ```julia
 xarr = Float64.([1e-2, 5e-2, 1e-1, 0.5])
 qarr = Float64.([10, 1e2, 1e3, 5e3])
 nx = length(xarr)
-nq = length(qarr);
+nq = length(qarr)
+
+iasp = QCDNUM.isp_s2user(xarr, nx, qarr, nq)
 ```
 
 ```julia
-QCDNUM.isp_s2user(xarr, nx, qarr, nq)
+QCDNUM.ssp_nprint(iasp)
 ```
 
 ```julia
