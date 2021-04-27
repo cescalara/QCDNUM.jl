@@ -179,9 +179,10 @@ iasp = QCDNUM.isp_s2make(5, 5)
 # Define function to read from QCDNUM into spline
 function func(ix, iq, first)::Float64
     
-    ix = ix[]
+    ix = ix[] # deref ptr
     iq = iq[]
 
+    # What to do about no static vars?
     iset = Int32(QCDNUM.dsp_uread(1))
     ipdf = Int32(QCDNUM.dsp_uread(2))
     
@@ -245,5 +246,10 @@ iasp = QCDNUM.isp_s2user(xarr, nx, qarr, nq)
 ```julia
 QCDNUM.ssp_nprint(iasp)
 ```
+```julia
+# Test 2D int against gauss quad?
+# Implement visual checks
+```
+
 
 
