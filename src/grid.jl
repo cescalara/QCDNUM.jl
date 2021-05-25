@@ -76,6 +76,20 @@ function ixfrmx(x::Float64)
 end
 
 """
+    xfrmix(ix)
+
+Get `x` value at grid point `ix`.
+"""
+function xfrmix(ix::Integer)
+
+    ix = Ref{Int32}(ix)
+
+    x = @ccall xfrmix_(ix::Ref{Int32})::Float64
+
+    x[]    
+end
+
+"""
     iqfrmq(q2)
 
 Get grid point index of the closest grid point at or 
@@ -88,6 +102,20 @@ function iqfrmq(q2::Float64)
     iq = @ccall iqfrmq_(q2::Ref{Float64})::Int32
     
     iq
+end
+
+"""
+    qfrmiq(iq)
+
+Get `q2` value at grid point `iq`.
+"""
+function qfrmiq(iq::Integer)
+
+    iq = Ref{Int32}(iq)
+
+    q2 = @ccall qfrmiq_(iq::Ref{Int32})::Float64
+
+    q2[]    
 end
 
 """
