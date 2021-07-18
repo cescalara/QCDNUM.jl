@@ -76,7 +76,7 @@ function sumfxq(iset::Integer, c::Array{Float64}, isel::Integer, x::Float64,
     ichk = Ref{Int32}(ichk)
    
     pdf = @ccall allfxq_(iset::Ref{Int32}, c::Ref{Float64}, isel::Ref{Int32},
-                         x::Ref{Float64}, qmu2::Ref{Float64}, pdf::Ref{Float64},
+                         x::Ref{Float64}, qmu2::Ref{Float64},
                          ichk::Ref{Int32})::Float64
     
     pdf[]
