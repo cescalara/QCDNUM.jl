@@ -9,7 +9,7 @@ Get all flavour-pdf values for a given `x` and `mu^2`.
 - `x::Float64`: input value of `x`.
 - `qmu2::Float64`: input value of `qmu2`.
 - `n::Integer`: number of additional pdfs to be returned.
-- `ichk::Integer`: flag to steer errror checking. See QCDNUM 
+- `ichk::Integer`: flag to steer error checking. See QCDNUM 
 docs. `ichk = -1` makes code faster, at the risk of not 
 checking certain things.
 
@@ -36,6 +36,52 @@ function allfxq(iset::Integer, x::Float64, qmu2::Float64,
     
     pdf
 end
+
+"""
+    sumfxq(iset, c, isel, x, qmu2, ichk)
+
+Return the gluon or a weighted sum of quark 
+densities, depending on the selection flag, `isel`.
+
+# `isel` values:
+0: Gluon density |xg>
+1: Linear combination `c` summed over _active_ flavours
+2-8: Specific singlet/non-singlet quark component
+9: Intrinsic heavy flavours 
+12+i: Additional pdf |xf_i> in iset
+
+See QCDNUM manual for more information.
+
+# Arguments
+- `iset::Integer`: pdf set id (1-24).
+- `c::Array{Float64}`: Coefficients of quarks/anti-quarks
+- `isel::Integer`: Selection flag
+- `x::Float64`: input value of `x`.
+- `qmu2::Float64`: input value of `qmu2`.
+- `n::Integer`: number of additional pdfs to be returned.
+- `ichk::Integer`: flag to steer error checking. See QCDNUM 
+docs. `ichk = -1` makes code faster, at the risk of not 
+checking certain things.
+
+# Returns
+- `pdf::Float64`: pdf value.
+"""
+function sumfxq(iset::Integer, c::Array{Float64}, isel::Integer, x::Float64,
+                qmu2::Float64, ichk::Integer)
+
+    iset = Ref{Int32}(iset)
+    isel = Ref{Int32}(isel)
+    x = Ref{Float64}(x)
+    qmu2 = Ref{Float64}(qmu2)
+    ichk = Ref{Int32}(ichk)
+   
+    pdf = @ccall allfxq_(iset::Ref{Int32}, c::Ref{Float64}, isel::Ref{Int32},
+                         x::Ref{Float64}, qmu2::Ref{Float64}, pdf::Ref{Float64},
+                         ichk::Ref{Int32})::Float64
+    
+    pdf[]
+end
+
 
 """
     bvalij(iset, id, ix, iq, ichk)
