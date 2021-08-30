@@ -93,7 +93,7 @@ Get the value of a basis pdf at a given point (`ix`, `iq`).
 - `id::Integer`: basis pdf identifier from 0 to 12+n, 
 where n is the number of additional pdfs in iset.
 - `ix::Integer`: x index.
-- `iq::Intger`: qq index.
+- `iq::Integer`: qq index.
 - `ichk::Integer`: flag to steer error checking. 
 See allfxq().
 
