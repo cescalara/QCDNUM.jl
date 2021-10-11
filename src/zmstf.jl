@@ -14,6 +14,22 @@ function zmfillw()
 end
 
 """
+    zmwords()
+
+Check the number of words available in the ZMSTF 
+workspace and the number of words used.
+"""
+function zmwords()
+
+    ntotal = Ref{Int32}()
+    nused = Ref{Int32}()
+
+    @ccall zmwords_(ntotal::Ref{Int32}, nused::Ref{Int32})::Nothing
+    
+    ntotal[], nused[]
+end
+
+"""
     zmstfun()
 
 Calculate a structure function from a linear combination 

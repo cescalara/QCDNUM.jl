@@ -189,6 +189,95 @@ end
 
 
 """
+    ssp_sxf123(ia, iset, def, istf, iq)
+
+Fast structure function input for splines over x.
+
+# Arguments
+- `ia::Integer`: address of the spline object
+- `iset::Integer`: QCDNUM pdf-set index
+- `def::Array{Float64}`: Array of (anti-)quark
+coefficients 
+- `istf::Integer`: structure function index 
+1<=>F_L, 2<=>F_2, 3<=>xF_3, 4<=>F_L'
+- `iq::Integer`: index of qq value 
+"""
+function ssp_sxf123(ia::Integer, iset::Integer, def::Array{Float64},
+                    istf::Integer, iq::Integer)
+
+    ia = Ref{Int32}(ia)
+    iset = Ref{Int32}(iset)
+    istf = Ref{Int32}(istf)
+    iq = Ref{Int32}(iq)
+
+    @ccall ssp_sxf123_(ia::Ref{Int32}, iset::Ref{Int32},
+                       def::Ref{Float64}, istf::Integer,
+                       iq::Integer)::Nothing
+
+    nothing
+end
+
+"""
+    ssp_sq123(ia, iset, def, istf, ix)
+
+Fast structure function input for splines over qq.
+
+# Arguments
+- `ia::Integer`: address of the spline object
+- `iset::Integer`: QCDNUM pdf-set index
+- `def::Array{Float64}`: Array of (anti-)quark
+coefficients 
+- `istf::Integer`: structure function index 
+1<=>F_L, 2<=>F_2, 3<=>xF_3, 4<=>F_L'
+- `ix::Integer`: index of x value 
+"""
+function ssp_sqf123(ia::Integer, iset::Integer, def::Array{Float64},
+                    istf::Integer, ix::Integer)
+
+    ia = Ref{Int32}(ia)
+    iset = Ref{Int32}(iset)
+    istf = Ref{Int32}(istf)
+    ix = Ref{Int32}(ix)
+
+    @ccall ssp_sqf123_(ia::Ref{Int32}, iset::Ref{Int32},
+                       def::Ref{Float64}, istf::Integer,
+                       ix::Integer)::Nothing
+
+    nothing
+end
+
+"""
+    ssp_s2f123(ia, iset, def, istf, rs)
+
+Fast structure function input for 2D 
+splines over x and qq.
+
+# Arguments
+- `ia::Integer`: address of the spline object
+- `iset::Integer`: QCDNUM pdf-set index
+- `def::Array{Float64}`: Array of (anti-)quark
+coefficients 
+- `istf::Integer`: structure function index 
+1<=>F_L, 2<=>F_2, 3<=>xF_3, 4<=>F_L'
+- `rs::Float64`: sqrt(s) cut - 0 for no kinematic cut
+
+"""
+function ssp_s2f123(ia::Integer, iset::Integer, def::Array{Float64},
+                    istf::Integer, rs::Float64)
+
+    ia = Ref{Int32}(ia)
+    iset = Ref{Int32}(iset)
+    istf = Ref{Int32}(istf)
+    rs = Ref{Float64}(rs)
+
+    @ccall ssp_sxf123_(ia::Ref{Int32}, iset::Ref{Int32},
+                       def::Ref{Float64}, istf::Integer,
+                       rs::Float64)::Nothing
+
+    nothing
+end
+
+"""
     isp_s2user(xarr, nx, qarr, nq)
 
 Set your own node points in the spline in case
@@ -549,4 +638,20 @@ function dsp_ints2(ia::Integer, x1::Float64, x2::Float64,
                             q2::Ref{Float64})::Float64
 
     val[]
+end
+
+"""
+    ssp_erase(ia)
+
+Clear the memory from `ia` onwards. `ia`=0 can 
+also be used to erase all spline objects in 
+memory.
+"""
+function ssp_erase(ia::Integer)
+
+    ia  = Ref{Int32}(ia)
+
+    @ccall ssp_erase_(ia::Ref{Int32})::Nothing
+
+    nothing
 end
