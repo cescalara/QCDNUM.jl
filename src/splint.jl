@@ -211,8 +211,8 @@ function ssp_sxf123(ia::Integer, iset::Integer, def::Array{Float64},
     iq = Ref{Int32}(iq)
 
     @ccall ssp_sxf123_(ia::Ref{Int32}, iset::Ref{Int32},
-                       def::Ref{Float64}, istf::Integer,
-                       iq::Integer)::Nothing
+                       def::Ref{Float64}, istf::Ref{Int32},
+                       iq::Ref{Int32})::Nothing
 
     nothing
 end
