@@ -240,8 +240,8 @@ function ssp_sqf123(ia::Integer, iset::Integer, def::Array{Float64},
     ix = Ref{Int32}(ix)
 
     @ccall ssp_sqf123_(ia::Ref{Int32}, iset::Ref{Int32},
-                       def::Ref{Float64}, istf::Integer,
-                       ix::Integer)::Nothing
+                       def::Ref{Float64}, istf::Ref{Int32},
+                       ix::Ref{Int32})::Nothing
 
     nothing
 end
@@ -271,8 +271,8 @@ function ssp_s2f123(ia::Integer, iset::Integer, def::Array{Float64},
     rs = Ref{Float64}(rs)
 
     @ccall ssp_sxf123_(ia::Ref{Int32}, iset::Ref{Int32},
-                       def::Ref{Float64}, istf::Integer,
-                       rs::Float64)::Nothing
+                       def::Ref{Float64}, istf::Ref{Int32},
+                       rs::Ref{Float64})::Nothing
 
     nothing
 end
