@@ -270,7 +270,7 @@ function ssp_s2f123(ia::Integer, iset::Integer, def::Array{Float64},
     istf = Ref{Int32}(istf)
     rs = Ref{Float64}(rs)
 
-    @ccall ssp_sxf123_(ia::Ref{Int32}, iset::Ref{Int32},
+    @ccall ssp_s2f123_(ia::Ref{Int32}, iset::Ref{Int32},
                        def::Ref{Float64}, istf::Ref{Int32},
                        rs::Ref{Float64})::Nothing
 
