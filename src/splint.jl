@@ -617,25 +617,30 @@ end
 
 
 """
-    dsp_ints2(ia, x1, x2, q1, q2)
+    dsp_ints2(ia, x1, x2, q1, q2, rs, np)
 
 Evaluate integral of spline between x1, x2, q1 and q2.
+Also takes care of rscut and integrations makes use of N-point 
+Gauss quadrature, as defined by the choice of np.
 
 The integration limits must lie inside the 
 spline range.
 """
 function dsp_ints2(ia::Integer, x1::Float64, x2::Float64,
-                   q1::Float64, q2::Float64)
+                   q1::Float64, q2::Float64, rs::Float64, np::Integer)
 
     ia = Ref{Int32}(ia)
     x1 = Ref{Float64}(x1)
     x2 = Ref{Float64}(x2)
     q1 = Ref{Float64}(q1)
     q2 = Ref{Float64}(q2)
+    rs = Ref{Float64}(rs)
+    np = Ref{Int32}(np)
 
     val = @ccall dsp_ints2_(ia::Ref{Int32}, x1::Ref{Float64},
                             x2::Ref{Float64}, q1::Ref{Float64},
-                            q2::Ref{Float64})::Float64
+                            q2::Ref{Float64}, rs::Ref{Float64},
+                            np::Ref{Int32})::Float64
 
     val[]
 end
