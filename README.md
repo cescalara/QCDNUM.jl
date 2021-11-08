@@ -53,9 +53,9 @@ julia> ]
 
 
 In both cases the QCDNUM package will be available via `using QCDNUM`.
-
-
-
-
-
+To show the available functions, execute
+```
+names(QCDNUM, all=true)
+```
+in the Julia interpreter.
 
