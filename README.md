@@ -45,7 +45,7 @@ julia> ]
 
  - Execute 
 ```
-(@v1.6) pkg> generate PartonDensity
+(@v1.6) pkg> generate QCDNUM
 ...... 
 (@v1.6) pkg>  . dev
 ```
