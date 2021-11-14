@@ -1,6 +1,6 @@
 module QCDNUM
 
-using Libdl
+using QCDNUM_jll
 
 include("initialisation.jl")
 include("grid.jl")

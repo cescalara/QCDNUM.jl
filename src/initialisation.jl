@@ -1,19 +1,16 @@
 """
-    qcinit(qcdnum_lib, lun, filename)
+    qcinit(lun, filename)
 
 Initialise QCDNUM - should be called before anything else. 
 
 # Arguments
-- `qcdnum_lib::String`: location of the QCDNUM library
 - `lun::Integer`: the output logical unit number. When set to 6, 
 the QCDNUM messages appear on the standard output. When set to -6, 
 the QCDNUM banner printout is suppressed.
 - `filename::String`: the output filename to store log.
 """
-function qcinit(qcdnum_lib::String, lun::Integer, output_file::String)
+function qcinit(lun::Integer, output_file::String)
 
-    qcdnum = Libdl.dlopen(qcdnum_lib, RTLD_NOW | RTLD_GLOBAL)
-    
     lun = Ref{Int32}(lun)
  
     @ccall qcinit_(lun::Ref{Int32}, output_file::Cstring)::Nothing
