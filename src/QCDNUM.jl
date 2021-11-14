@@ -13,7 +13,7 @@ elseif Sys.isapple()
 end
 
 # Load
-qcdnum = Libdl.dlopen(qcdnum_lib, RTLD_NOW | RTLD_GLOBAL)
+export qcdnum = Libdl.dlopen(qcdnum_lib, RTLD_NOW | RTLD_GLOBAL)
 
 include("initialisation.jl")
 include("grid.jl")
