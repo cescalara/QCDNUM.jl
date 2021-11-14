@@ -11,7 +11,7 @@ jobs:
     steps:
       - run: wget https://www.nikhef.nl/\~h24/download/qcdnum170183.tar.gz
       - run: gunzip qcdnum170183.tar.gz
-      - run: tar -xvf qcdnum170115.tar
+      - run: tar -xvf qcdnum170183.tar
       - run: cd qcdnum-17-01-83
       - run: ./configure
       - run: make
