@@ -12,7 +12,7 @@ QCDNUM.jl is currently under development and more functionality and documentatio
 
 Please check out the [documentation](https://francescacapel.com/QCDNUM.jl/dev/) for more information.
 
-## Quickstart
+## Quick start
 
 To install QCDNUM.jl, start Julia and run
 
