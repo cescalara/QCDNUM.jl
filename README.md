@@ -1,6 +1,6 @@
 # QCDNUM.jl
 
-[![](https://img.shields.io/badge/docs-dev-blue.svg)](https://francescacapel.com/QCDNUM.jl/dev/)
+[![](https://img.shields.io/badge/docs-dev-blue.svg)](https://francescacapel.com/QCDNUM.jl/dev/) ![Build](https://github.com/cescalara/QCDNUM.jl/actions/workflows/Tests.yml/badge.svg)
 
 Fast QCD evolution and convolution.
 
