@@ -11,6 +11,8 @@ the QCDNUM banner printout is suppressed.
 """
 function qcinit(lun::Integer, output_file::String)
 
+    qcdnum = Libdl.dlopen(libqcdnum, RTLD_NOW | RTLD_GLOBAL)
+
     lun = Ref{Int32}(lun)
  
     @ccall qcinit_(lun::Ref{Int32}, output_file::Cstring)::Nothing
@@ -25,8 +27,6 @@ Get next free logical unit number above `max(lmin, 10)`.
 Returns 0 if there is no free logical unit.
 """
 function nxtlun(lmin::Integer)
-
-    qcdnum = Libdl.dlopen(libqcdnum, RTLD_NOW | RTLD_GLOBAL)
     
     lmin = Ref{Int32}(lmin)
 
