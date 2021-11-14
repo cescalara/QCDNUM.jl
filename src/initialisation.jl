@@ -11,8 +11,6 @@ the QCDNUM banner printout is suppressed.
 """
 function qcinit(lun::Integer, output_file::String)
 
-    qcdnum = Libdl.dlopen(qcdnum_lib, RTLD_NOW | RTLD_GLOBAL)
-
     lun = Ref{Int32}(lun)
  
     @ccall qcinit_(lun::Ref{Int32}, output_file::Cstring)::Nothing

@@ -1,16 +1,6 @@
 module QCDNUM
 
-using Libdl
-
-# Get path to lib
-qcdnum_path = chomp(read(`qcdnum-config --libdir`, String))
-
-# Check OS
-if Sys.islinux()
-    qcdnum_lib = string(qcdnum_path, "/libQCDNUM.so")
-elseif Sys.isapple()
-    qcdnum_lib = string(qcdnum_path, "/libQCDNUM.dylib")
-end
+using QCDNUM_jll
 
 include("initialisation.jl")
 include("grid.jl")
