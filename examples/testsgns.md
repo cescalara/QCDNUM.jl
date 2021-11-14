@@ -7,9 +7,9 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.11.0
   kernelspec:
-    display_name: Julia 1.6.1
+    display_name: Julia 1.7.0-rc2
     language: julia
-    name: julia-1.6
+    name: julia-1.7
 ---
 
 # Test QCDNUM evolution options
@@ -152,7 +152,7 @@ func2_c = @cfunction(func2, Float64, (Ref{Int32}, Ref{Float64}));
 ## Run QCDNUM
 
 ```julia
-QCDNUM.qcinit("/usr/local/lib/libQCDNUM.dylib", -6, " ")
+QCDNUM.qcinit(-6, " ")
 nx = QCDNUM.gxmake(xmin, iwt, nxsubg, nxin, iosp) # make x grid
 nq = QCDNUM.gqmake(qq, wt, 2, nqin) # make qq grid
 nw = QCDNUM.fillwt(itype) # fill weight tables

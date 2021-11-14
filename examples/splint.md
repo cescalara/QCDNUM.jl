@@ -7,9 +7,9 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.11.0
   kernelspec:
-    display_name: Julia 1.6.1
+    display_name: Julia 1.7.0-rc2
     language: julia
-    name: julia-1.6
+    name: julia-1.7
 ---
 
 # SPLINT package example
@@ -125,7 +125,7 @@ func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
 ```
 
 ```julia
-QCDNUM.qcinit("/usr/local/lib/libQCDNUM.dylib", -6, " ")
+QCDNUM.qcinit(-6, " ")
 nx = QCDNUM.gxmake(xmin, iwt, ng, nxin, iosp)
 nq = QCDNUM.gqmake(qq, wt, ngq, nqin)
 nw = QCDNUM.fillwt(itype)
@@ -229,7 +229,9 @@ x1 = 0.01
 x2 = 0.1
 q1 = 10.0
 q2 = 100.0
-QCDNUM.dsp_ints2(iasp, x1, x2, q1, q2)
+rs = 370.0
+np = 4
+QCDNUM.dsp_ints2(iasp, x1, x2, q1, q2, rs, np)
 ```
 
 It is also possible to set user nodes, if the automatically chosen ones are not satisfactory.
@@ -245,10 +247,6 @@ iasp = QCDNUM.isp_s2user(xarr, nx, qarr, nq)
 
 ```julia
 QCDNUM.ssp_nprint(iasp)
-```
-```julia
-# Test 2D int against gauss quad?
-# Implement visual checks
 ```
 
 
