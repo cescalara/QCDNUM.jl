@@ -26,6 +26,8 @@ Returns 0 if there is no free logical unit.
 """
 function nxtlun(lmin::Integer)
 
+    qcdnum = Libdl.dlopen(libqcdnum, RTLD_NOW | RTLD_GLOBAL)
+    
     lmin = Ref{Int32}(lmin)
 
     lun = @ccall nxtlun_(lmin::Ref{Int32})::Int32
