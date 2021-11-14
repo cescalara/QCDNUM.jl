@@ -116,7 +116,7 @@ func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
 
 Next, let's initialise QCDNUM and run QCDNUM to evolve the PDF.
 
-```julia
+```@example 1
 QCDNUM.qcinit(-6, " ")
 nx = QCDNUM.gxmake(xmin, iwt, ng, nxin, iosp)
 nq = QCDNUM.gqmake(qq, wt, ngq, nqin)
@@ -136,7 +136,7 @@ csea = 2*pdf[3];
 
 Now, we can breifly check the results
 
-```julia
+```@example 1
 @printf("x, q, CharmSea = %0.4e, %0.4e, %0.4e\n", x, q, csea)
 @printf("as(mz2) = %0.4e", asmz)
 ```
