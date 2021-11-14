@@ -11,6 +11,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup
+        run: |
+	  wget https://www.nikhef.nl/\~h24/download/qcdnum170183.tar.gz
+	  gunzip qcdnum170183.tar.gz
+	  tar -xvf qcdnum170115.tar
+	  cd qcdnum-17-01-83
+	  ./configure
+	  make
+	  make install
+
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@latest
         with:
