@@ -12,10 +12,11 @@ jobs:
       - run: wget https://www.nikhef.nl/\~h24/download/qcdnum170183.tar.gz
       - run: gunzip qcdnum170183.tar.gz
       - run: tar -xvf qcdnum170183.tar
-      - run: cd qcdnum-17-01-83
-      - run: ./configure
-      - run: make
-      - run: make install
+      - run: |
+          cd qcdnum-17-01-83
+          ./configure
+          make
+          make install
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@latest
         with:
