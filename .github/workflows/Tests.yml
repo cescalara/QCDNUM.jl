@@ -9,14 +9,13 @@ jobs:
         julia-arch: [x64]
         os: [ubuntu-latest] # [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-      - name: Install dependencies
-        run: wget https://www.nikhef.nl/\~h24/download/qcdnum170183.tar.gz
-	run: gunzip qcdnum170183.tar.gz
-	run: tar -xvf qcdnum170115.tar
-	run: cd qcdnum-17-01-83
-	run: ./configure
-	run: make
-	run: make install
+      - run: wget https://www.nikhef.nl/\~h24/download/qcdnum170183.tar.gz
+      - run: gunzip qcdnum170183.tar.gz
+      - run: tar -xvf qcdnum170115.tar
+      - run: cd qcdnum-17-01-83
+      - run: ./configure
+      - run: make
+      - run: make install
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@latest
         with:
