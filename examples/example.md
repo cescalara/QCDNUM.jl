@@ -7,9 +7,9 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.11.0
   kernelspec:
-    display_name: Julia 1.6.1
+    display_name: Julia 1.7.0-rc2
     language: julia
-    name: julia-1.6
+    name: julia-1.7
 ---
 
 ## QCDNUM example program
@@ -121,7 +121,7 @@ func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
 ```
 
 ```julia
-QCDNUM.qcinit("/usr/local/lib/libQCDNUM.dylib", -6, " ")
+QCDNUM.qcinit(-6, " ")
 nx = QCDNUM.gxmake(xmin, iwt, ng, nxin, iosp)
 nq = QCDNUM.gqmake(qq, wt, ngq, nqin)
 nw = QCDNUM.fillwt(itype)
