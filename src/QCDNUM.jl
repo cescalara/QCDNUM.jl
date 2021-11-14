@@ -12,9 +12,6 @@ elseif Sys.isapple()
     qcdnum_lib = string(qcdnum_path, "/libQCDNUM.dylib")
 end
 
-# Load
-qcdnum = Libdl.dlopen(qcdnum_lib, RTLD_NOW | RTLD_GLOBAL)
-
 include("initialisation.jl")
 include("grid.jl")
 include("weights.jl")
