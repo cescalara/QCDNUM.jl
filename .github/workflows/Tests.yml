@@ -18,6 +18,8 @@ jobs:
           ./configure --prefix="/home/runner/QCDNUM.jl/QCDNUM.jl/qcdnum_lib"
           make
           make install
+          export PATH=$PATH:/home/runner/QCDNUM.jl/QCDNUM.jl/qcdnum_lib/bin
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/runner/QCDNUM.jl/QCDNUM.jl/qcdnum_lib/lib
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@latest
         with:
