@@ -9,12 +9,13 @@ jobs:
         julia-arch: [x64]
         os: [ubuntu-latest] # [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-      - run: wget https://www.nikhef.nl/\~h24/download/qcdnum170183.tar.gz
-      - run: gunzip qcdnum170183.tar.gz
-      - run: tar -xvf qcdnum170183.tar
       - run: |
+          wget https://www.nikhef.nl/\~h24/download/qcdnum170183.tar.gz
+          gunzip qcdnum170183.tar.gz
+          tar -xvf qcdnum170183.tar
+          mkdir qcdnum_lib
           cd qcdnum-17-01-83
-          ./configure
+          ./configure --prefix="/home/runner/QCDNUM.jl/QCDNUM.jl/qcdnum_lib"
           make
           make install
       - uses: actions/checkout@v2
