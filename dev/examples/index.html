@@ -91,7 +91,7 @@ qmz2 = 8315.25;</code></pre><pre class="documenter-example-output"><code class="
     return f
 end
 
-func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Ptr{Nothing} @0x00007f2b57efda90</code></pre><p>Next, let&#39;s initialise QCDNUM and run QCDNUM to evolve the PDF.</p><pre><code class="language-julia hljs">QCDNUM.qcinit(-6, &quot; &quot;)
+func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Ptr{Nothing} @0x00007f576badeb80</code></pre><p>Next, let&#39;s initialise QCDNUM and run QCDNUM to evolve the PDF.</p><pre><code class="language-julia hljs">QCDNUM.qcinit(-6, &quot; &quot;)
 nx = QCDNUM.gxmake(xmin, iwt, ng, nxin, iosp)
 nq = QCDNUM.gqmake(qq, wt, ngq, nqin)
 nw = QCDNUM.fillwt(itype)
@@ -201,7 +201,7 @@ bbr = 0.0;</code></pre><pre class="documenter-example-output"><code class="nohig
     return f
 end
 
-func1_c = @cfunction(func1, Float64, (Ref{Int32}, Ref{Float64}));</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Ptr{Nothing} @0x00007f2b57f06290</code></pre><p>And also a function that passes an input PDF as an output of another PDF.</p><pre><code class="language-julia hljs">function func2(ipdf, x)::Float64
+func1_c = @cfunction(func1, Float64, (Ref{Int32}, Ref{Float64}));</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Ptr{Nothing} @0x00007f576bae7380</code></pre><p>And also a function that passes an input PDF as an output of another PDF.</p><pre><code class="language-julia hljs">function func2(ipdf, x)::Float64
     i = ipdf[]
     xb = x[]
 
@@ -220,7 +220,7 @@ func1_c = @cfunction(func1, Float64, (Ref{Int32}, Ref{Float64}));</code></pre><p
     return f
 end
 
-func2_c = @cfunction(func2, Float64, (Ref{Int32}, Ref{Float64}));</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Ptr{Nothing} @0x00007f2b57f06d60</code></pre><p>Now we can set up QCDNUM and print a summary of our inputs.</p><pre><code class="language-julia hljs">QCDNUM.qcinit(-6, &quot; &quot;)
+func2_c = @cfunction(func2, Float64, (Ref{Int32}, Ref{Float64}));</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Ptr{Nothing} @0x00007f576bae7e50</code></pre><p>Now we can set up QCDNUM and print a summary of our inputs.</p><pre><code class="language-julia hljs">QCDNUM.qcinit(-6, &quot; &quot;)
 nx = QCDNUM.gxmake(xmin, iwt, nxsubg, nxin, iosp) # make x grid
 nq = QCDNUM.gqmake(qq, wt, 2, nqin) # make qq grid
 nw = QCDNUM.fillwt(itype) # fill weight tables
@@ -428,7 +428,7 @@ def = Float64.([0., 0., 0., 0., 0.,-1., 0., 1., 0., 0., 0., 0., 0.,
     return f
 end
 
-func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Ptr{Nothing} @0x00007f2b57f15a60</code></pre><pre><code class="language-julia hljs">proton = Float64.([4.,1.,4.,1.,4.,1.,0.,1.,4.,1.,4.,1.,4.])/9.0;
+func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Ptr{Nothing} @0x00007f576baf6b40</code></pre><pre><code class="language-julia hljs">proton = Float64.([4.,1.,4.,1.,4.,1.,0.,1.,4.,1.,4.,1.,4.])/9.0;
 xx = Array{Float64}(undef, 1000)
 q2 = Array{Float64}(undef, 1000)
 
@@ -496,4 +496,4 @@ end</code></pre><pre class="documenter-example-output"><code class="nohighlight 
 
 
 
- Wait: 1000 evols and 2.10^6 stfs will take ...   8.867728 seconds (26.72 k allocations: 16.888 MiB, 0.10% gc time, 0.13% compilation time)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../installation/">« Installation</a><a class="docs-footer-nextpage" href="../functions/">Available functions »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.10 on <span class="colophon-date" title="Sunday 14 November 2021 17:52">Sunday 14 November 2021</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+ Wait: 1000 evols and 2.10^6 stfs will take ...  10.142039 seconds (26.72 k allocations: 16.888 MiB, 0.10% gc time, 0.14% compilation time)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../installation/">« Installation</a><a class="docs-footer-nextpage" href="../functions/">Available functions »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.10 on <span class="colophon-date" title="Sunday 14 November 2021 18:04">Sunday 14 November 2021</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
