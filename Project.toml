@@ -1,7 +1,7 @@
 name = "QCDNUM"
 uuid = "4acc4d78-9ad5-435b-99b1-7af0628e6e5b"
 authors = ["Francesca Capel <capel.francesca@gmail.com> and contributors"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
