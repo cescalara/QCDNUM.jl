@@ -8,7 +8,7 @@ qcdnum_path = chomp(read(`qcdnum-config --libdir`, String))
 # Check OS
 if Sys.islinux()
     qcdnum_lib = string(qcdnum_path, "/libQCDNUM.so")
-else if Sys.isapple()
+elseif Sys.isapple()
     qcdnum_lib = string(qcdnum_path, "/libQCDNUM.dylib")
 end
 
