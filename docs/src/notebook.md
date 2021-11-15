@@ -2,7 +2,7 @@
 
 The simplest way to use the QCDNUM in the Jupyter notebook after the installation is 
 
-- To create a virtual python environment
+- To create a virtual python environment with an ad-hoc name `myjuliav`
 ```
 [user@host workdirectory]$ python -m venv myjuliav
 ```
@@ -12,7 +12,7 @@ The simplest way to use the QCDNUM in the Jupyter notebook after the installatio
 [user@host workdirectory]$ source myjuliav/bin/activate.sh
 ```
 
-- Install the Jupyter notebook
+- Install the Jupyter notebook package using `pip`
 ```
 (myjuliav) [user@host workdirectory]$ python -m pip install notebook
 ```
