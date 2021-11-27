@@ -70,13 +70,15 @@ end
     for itype in [1, 2, 3]
         nw = QCDNUM.fillwt(itype)
         @test typeof(nw) == Int32
-        @test QCDNUM.wtfile(itype, string("test", string(itype), ".wgt")) == nothing
-        sleep(1)
+        #sleep(1)
+        #@test QCDNUM.wtfile(itype, string("test", string(itype), ".wgt")) == nothing
+        #sleep(1)
     end
 
-    for itype in [1, 2, 3]
-        rm(string("test", string(itype), ".wgt"))
-    end
+    # Delete test files
+    #for itype in [1, 2, 3]
+    #    rm(string("test", string(itype), ".wgt"))
+    #end
     
 end
 
@@ -96,3 +98,252 @@ end
     
 end
 
+# Define a test PDF function and mapping
+function func(ipdf, x)::Float64
+
+    i = ipdf[]
+    xb = x[]
+    adbar = 0.1939875
+    f = 0
+    if (i == 0) 
+        ag = 1.7
+        f = ag * xb^-0.1 * (1.0-xb)^5.0
+    end
+    if (i == 1)
+        ad = 3.064320
+        f = ad * xb^0.8 * (1.0-xb)^4.0
+    end
+    if (i == 2)
+        au = 5.107200
+        f = au * xb^0.8 * (1.0-xb)^3.0
+    end
+    if (i == 3) 
+        f = 0.0
+    end
+    if (i == 4)
+        f = adbar * xb^-0.1 * (1.0-xb)^6.0
+    end
+    if (i == 5) 
+        f = adbar * xb^-0.1 * (1.0-xb)^6.0 * (1.0-xb)
+    end
+    if (i == 6)
+        xdbar = adbar * xb^-0.1 * (1.0-xb)^6.0
+        xubar = adbar * xb^-0.1 * (1.0-xb)^6.0 * (1.0-xb)
+        f = 0.2 * (xdbar + xubar)
+    end
+    if (i >= 7)
+        f = 0.0
+    end
+
+    return f
+end
+
+def = Float64.([0., 0., 0., 0., 0.,-1., 0., 1., 0., 0., 0., 0., 0.,     
+                0., 0., 0., 0.,-1., 0., 0., 0., 1., 0., 0., 0., 0.,      
+                0., 0., 0.,-1., 0., 0., 0., 0., 0., 1., 0., 0., 0.,      
+                0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0.,      
+                0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.,      
+                0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0.,      
+                0., 0.,-1., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0.,      
+                0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,      
+                0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,      
+                0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,      
+                0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,      
+                0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]);
+
+@testset "Evolution & interpolation" begin
+
+    # C-pointer to func
+    func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
+
+    # Initialise
+    QCDNUM.qcinit(-6, "")
+
+    # Grids and weights
+    nx = QCDNUM.gxmake(Float64.([1.0e-4]), Int32.([1]), 1, 100, 3)
+    nq = QCDNUM.gqmake(Float64.([2e0, 1e4]), Float64.([1e0, 1e0]), 2, 50)
+    nw = QCDNUM.fillwt(1)
+
+    # Set parameters
+    QCDNUM.setord(3)
+    QCDNUM.setalf(0.364, 2.0)
+
+    # VFNS
+    iqc = QCDNUM.iqfrmq(3.0)
+    iqb = QCDNUM.iqfrmq(25.0)
+    QCDNUM.setcbt(0, iqc, iqb, 0)
+
+    # Evolution
+    iq0 = QCDNUM.iqfrmq(2.0)
+    eps = QCDNUM.evolfg(1, func_c, def, iq0)
+    @test typeof(eps) == Float64
+
+    # Interpolation
+    x = 1e-3
+    q = 1e3
+    pdf = QCDNUM.allfxq(1, x, q, 0, 1)
+    @test pdf[1] == 0.0
+    @test size(pdf)[1] == 13
+
+    ix = QCDNUM.ixfrmx(x)
+    iq = QCDNUM.iqfrmq(q)
+    
+    for id in 0:12
+        pdf_ij = QCDNUM.bvalij(1, id, ix, iq, 1)
+        pdf_xq = QCDNUM.bvalxq(1, id, x, q, 1)
+        @test isapprox(pdf_ij, pdf_xq, rtol=0.1)        
+    end
+
+    for id in -6:6
+        pdf_ij = QCDNUM.fvalij(1, id, ix, iq, 1)
+        pdf_xq = QCDNUM.fvalxq(1, id, x, q, 1)
+        @test isapprox(pdf_ij, pdf_xq, rtol=0.1)
+    end
+    
+end
+
+@testset "Structure functions" begin
+
+    # Initialise
+    QCDNUM.qcinit(-6, "")
+    
+    # C-pointer to func
+    func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
+
+    # Initialise
+    QCDNUM.qcinit(-6, "")
+
+    # Grids and weights
+    nx = QCDNUM.gxmake(Float64.([1.0e-4]), Int32.([1]), 1, 100, 3)
+    nq = QCDNUM.gqmake(Float64.([2e0, 1e4]), Float64.([1e0, 1e0]), 2, 50)
+    nw = QCDNUM.fillwt(1)
+
+    # ZMSTF
+    ntot, nused_bf = QCDNUM.zmwords()
+    nw = QCDNUM.zmfillw()
+    ntot, nused_af = QCDNUM.zmwords()
+    @test typeof(nw) == Int32
+    @test nw == nused_af - nused_bf
+
+    # Set parameters
+    QCDNUM.setord(3)
+    QCDNUM.setalf(0.364, 2.0)
+
+    # VFNS
+    iqc = QCDNUM.iqfrmq(3.0)
+    iqb = QCDNUM.iqfrmq(25.0)
+    QCDNUM.setcbt(0, iqc, iqb, 0)
+
+    # Evolution
+    iq0 = QCDNUM.iqfrmq(2.0)
+    eps = QCDNUM.evolfg(1, func_c, def, iq0)
+    @test typeof(eps) == Float64
+
+    Au = 4.0/9.0 
+    Ad = 1.0/9.0
+    w = [0., Ad, Au, Ad, Au, Ad, 0., Ad, Au, Ad, Au, Ad, 0.]
+    x = 1e-3
+    q = 1e3
+    
+    for istf in 1:4
+        f = QCDNUM.zmstfun(istf, w, [x], [q], 1, 0)
+        @test typeof(f[1]) == Float64 
+    end
+    
+end
+
+# Define function to read from QCDNUM into spline
+function func_sp(ix, iq, first)::Float64
+
+    # deref ptrs
+    ix = ix[] 
+    iq = iq[]
+
+    # Read iset and ipdf
+    iset = Int32(QCDNUM.dsp_uread(1))
+    ipdf = Int32(QCDNUM.dsp_uread(2))
+    
+    return QCDNUM.fvalij(iset, ipdf, ix, iq, 1)
+end
+
+
+@testset "SPLINT" begin
+
+        # Initialise
+    QCDNUM.qcinit(-6, "")
+    
+    # C-pointer to func
+    func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
+
+    # Initialise
+    QCDNUM.qcinit(-6, "")
+
+    # Grids and weights
+    nx = QCDNUM.gxmake(Float64.([1.0e-4]), Int32.([1]), 1, 100, 3)
+    nq = QCDNUM.gqmake(Float64.([2e0, 1e4]), Float64.([1e0, 1e0]), 2, 50)
+    nw = QCDNUM.fillwt(1)
+
+    # Set parameters
+    QCDNUM.setord(3)
+    QCDNUM.setalf(0.364, 2.0)
+
+    # VFNS
+    iqc = QCDNUM.iqfrmq(3.0)
+    iqb = QCDNUM.iqfrmq(25.0)
+    QCDNUM.setcbt(0, iqc, iqb, 0)
+
+    # Evolution
+    iq0 = QCDNUM.iqfrmq(2.0)
+    eps = QCDNUM.evolfg(1, func_c, def, iq0)
+    @test typeof(eps) == Float64
+
+    # SPLINT
+    func_sp_c = @cfunction(func_sp, Float64, (Ref{Int32}, Ref{Int32}, Ref{UInt8}))
+    
+    iset = 1
+    ipdf = 1
+
+    # Initialise
+    QCDNUM.ssp_spinit(100)
+
+    # Store iset and ipdf
+    QCDNUM.ssp_uwrite(1, Float64(iset))
+    QCDNUM.ssp_uwrite(2, Float64(ipdf))
+
+    # Make spline object
+    iasp = QCDNUM.isp_s2make(5, 5)
+    @test typeof(iasp) == Int32
+
+    # Fill the spline and set no kinematic limit
+    QCDNUM.ssp_s2fill(iasp, func_sp_c, 0.0)
+
+    # Check spline type
+    type = QCDNUM.isp_splinetype(iasp)
+    @test type == 2
+
+    # Check limits
+    nu, u1, u2, nv, v1, v2, n = QCDNUM.ssp_splims(iasp)
+    @test nu == 22
+    @test u1 ≈ 1e-4
+    @test u2 == 1.0
+    @test nv == 12
+    @test v1 == 2.0
+    @test v2 ≈ 1e4
+    @test n == nu * nv
+
+    # Evalute function and integral
+    x = 0.1
+    q = 100.0
+    f = QCDNUM.dsp_funs2(iasp, x, q, 1)
+    @test isapprox(f, 0.408, rtol=0.01)
+
+    x1 = 0.01
+    x2 = 0.1
+    q1 = 10.0
+    q2 = 100.0
+    rs = 370.0
+    np = 4
+    integral = QCDNUM.dsp_ints2(iasp, x1, x2, q1, q2, rs, np)
+    @test isapprox(integral, 3.709, rtol = 0.01)
+    
+end
