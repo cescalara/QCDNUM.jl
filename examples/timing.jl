@@ -1,4 +1,4 @@
-# ## Timing evolution and structure function evaluation
+# # Timing evolution and structure function evaluation
 
 # Based on the `timing.f` test job.
 

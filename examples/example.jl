@@ -1,4 +1,4 @@
-# ## QCDNUM example program
+# # QCDNUM example program
 #
 # Based on `example.f` detailed [here](https://www.nikhef.nl/~h24/qcdnum-files/testjobs1701/example.f).
 

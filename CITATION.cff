@@ -1,0 +1,23 @@
+cff-version: 0.1.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Francesca"
+  given-names: "Capel"
+  orcid: "https://orcid.org/0000-0002-1153-2139"
+title: "QCDNUM.jl"
+version: 0.1.0
+url: "https://github.com/cescalara/QCDNUM.jl"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Michiel"
+    given-names: "Botje"
+  doi: "10.1016/j.cpc.2010.10.020"
+  journal: "Comput. Phys. Commun."
+  month: 2
+  start: 490 # First page number
+  end: 532 # Last page number
+  title: "QCDNUM: Fast QCD Evolution and Convolution"
+  issue: 2
+  volume: 182
+  year: 2011

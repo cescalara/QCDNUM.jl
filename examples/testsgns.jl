@@ -1,4 +1,4 @@
-# ## Test QCDNUM evolution options
+# # Test QCDNUM evolution options
 
 # We can use [`QCDNUM.evolfg`](@ref) to evolve the PDF set for all flavours,
 # or [`QCDNUM.evsgns`](@ref) to evolve an arbitrary set of singlet/non-singlet pdfs.
