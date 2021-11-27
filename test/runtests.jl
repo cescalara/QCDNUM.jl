@@ -16,10 +16,10 @@ using Test
     @test out == 999.9
 
     # Set QCDNUM params
-    options = ["iter", "tlmc", "nopt", "edbg"]
-    for opt in options
-        @test QCDNUM.setint(opt, 1) == nothing
-    end
+    #options = ["iter", "tlmc", "nopt", "edbg"]
+    #for opt in options
+    #    @test QCDNUM.setint(opt, 1) == nothing
+    #end
     
 end
 
