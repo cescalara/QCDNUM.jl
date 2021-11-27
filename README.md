@@ -3,6 +3,7 @@
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://francescacapel.com/QCDNUM.jl/stable)
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://francescacapel.com/QCDNUM.jl/dev/) 
 ![CI](https://github.com/cescalara/QCDNUM.jl/actions/workflows/Tests.yml/badge.svg)
+[![codecov](https://codecov.io/gh/cescalara/QCDNUM.jl/branch/main/graph/badge.svg?token=S6Y4SMO34D)](https://codecov.io/gh/cescalara/QCDNUM.jl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Fast QCD evolution and convolution.
