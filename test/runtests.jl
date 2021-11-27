@@ -1,5 +1,10 @@
 using QCDNUM
 using Test
+using Documenter
+
+@testset "Docs" begin
+    doctest(QCDNUM)
+end
 
 @testset "Initialisation" begin
 
@@ -70,15 +75,7 @@ end
     for itype in [1, 2, 3]
         nw = QCDNUM.fillwt(itype)
         @test typeof(nw) == Int32
-        #sleep(1)
-        #@test QCDNUM.wtfile(itype, string("test", string(itype), ".wgt")) == nothing
-        #sleep(1)
     end
-
-    # Delete test files
-    #for itype in [1, 2, 3]
-    #    rm(string("test", string(itype), ".wgt"))
-    #end
     
 end
 
@@ -138,6 +135,25 @@ function func(ipdf, x)::Float64
     return f
 end
 
+function func_sgns(ipdf, x)::Float64
+    i = ipdf[]
+    xb = x[]
+    
+    f = 0.0
+    
+    if (i == -1)
+        iset = Int(QCDNUM.qstore("read", 1))
+        iq0 = Int(QCDNUM.qstore("read", 2))
+    else
+        iset = Int(QCDNUM.qstore("read", 1))
+        iq0 = Int(QCDNUM.qstore("read", 2))
+        ix = QCDNUM.ixfrmx(xb)
+        f = QCDNUM.bvalij(iset, i, ix, iq0, 1)
+    end
+    
+    return f
+end
+
 def = Float64.([0., 0., 0., 0., 0.,-1., 0., 1., 0., 0., 0., 0., 0.,     
                 0., 0., 0., 0.,-1., 0., 0., 0., 1., 0., 0., 0., 0.,      
                 0., 0., 0.,-1., 0., 0., 0., 0., 0., 1., 0., 0., 0.,      
@@ -177,6 +193,11 @@ def = Float64.([0., 0., 0., 0., 0.,-1., 0., 1., 0., 0., 0., 0., 0.,
     iq0 = QCDNUM.iqfrmq(2.0)
     eps = QCDNUM.evolfg(1, func_c, def, iq0)
     @test typeof(eps) == Float64
+    @test eps < 0.1
+
+    # For SGNS 
+    QCDNUM.qstore("write", 1, float(1))
+    QCDNUM.qstore("write", 2, float(iq0))
 
     # Interpolation
     x = 1e-3
@@ -199,6 +220,19 @@ def = Float64.([0., 0., 0., 0., 0.,-1., 0., 1., 0., 0., 0., 0., 0.,
         pdf_xq = QCDNUM.fvalxq(1, id, x, q, 1)
         @test isapprox(pdf_ij, pdf_xq, rtol=0.1)
     end
+
+    # Check number of PDF tables
+    ntables = QCDNUM.nptabs(1)
+    @test ntables == 13
+
+    # Check evolution type
+    type = QCDNUM.ievtyp(1)
+    @test type == 1
+
+    asmz, a, b = QCDNUM.asfunc(8315.25)
+    @test asmz ≈ 0.1180167650168159
+    @test a == 5
+    @test b == 0
     
 end
 
@@ -345,5 +379,28 @@ end
     np = 4
     integral = QCDNUM.dsp_ints2(iasp, x1, x2, q1, q2, rs, np)
     @test isapprox(integral, 3.709, rtol = 0.01)
+
+    # Copy nodes
+    u_nodes = QCDNUM.ssp_unodes(iasp, nu, nu)
+    v_nodes = QCDNUM.ssp_vnodes(iasp, nv, nv)
+    @test size(u_nodes)[1] == nu
+    @test size(v_nodes)[1] == nv
+
+    @test QCDNUM.ssp_nprint(iasp) == nothing
+
+    for i in 1:3
+        @test QCDNUM.ssp_extrapu(iasp, i) == nothing
+        @test QCDNUM.ssp_extrapv(iasp, i) == nothing
+    end
+
+    @test QCDNUM.ssp_erase(iasp) == nothing
+    
+    # 1D spline
+    iasp = QCDNUM.isp_sxmake(5)
+    @test typeof(iasp) == Int32
+    
+    iasp = QCDNUM.isp_sqmake(5)
+    @test typeof(iasp) == Int32
+    
     
 end
