@@ -85,7 +85,7 @@ Set or get QCDNUM integer parameters.
 
 # Arguments
 - `param::String`: Name of parameter. Can be "iter" (number of 
-evolutions in backwardds iteration), "tlmc" (time-like matching 
+evolutions in backwards iteration), "tlmc" (time-like matching 
 conditions), "nopt" (number of perturbative terms) or "edbg" 
 (evolution loop debug printout).
 - `val::Integer`: Value to set.

@@ -36,7 +36,7 @@ julia> ]
 ```
 pkg> generate QCDNUM
 ...... 
-pkg>  . dev
+pkg>  dev .
 ```
  - Exit the package manager using backspace or pressing `Ctrl+C`
 
@@ -48,4 +48,17 @@ To show the available functions, execute:
 using QCDNUM
 
 names(QCDNUM, all=true)
+```
+
+## Package removal
+
+To remove package execute
+
+```
+julia> using Pkg
+```
+followed by 
+
+```
+julia> Pkg.rm("QCDNUM")
 ```

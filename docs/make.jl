@@ -10,7 +10,9 @@ Examples = "Examples" => "examples.md"
 
 Functions = "Available functions" => "functions.md"
 
-PAGES = [About, Installation, Examples, Functions]
+Notebooks = "Notebook tutorial" => "notebook.md"
+
+PAGES = [About, Installation, Notebooks, Examples, Functions]
 
 makedocs(modules=[QCDNUM], sitename="QCDNUM.jl", pages=PAGES)
 
