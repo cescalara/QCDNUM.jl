@@ -1,4 +1,4 @@
-# ## SPLINT package example
+# # SPLINT package example
 
 # `SPLINT` is a QCDNUM add-on for converting results computed on the
 # evolution grid to cubic splines. This is convenient for
