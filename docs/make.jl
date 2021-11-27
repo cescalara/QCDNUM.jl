@@ -1,6 +1,14 @@
 push!(LOAD_PATH,"../src/")
 
-using Documenter, QCDNUM
+using Documenter
+using QCDNUM
+using Literate
+
+# Generate examples notebooks
+gen_content_dir = joinpath(@__DIR__, "src")
+example_src = joinpath(@__DIR__, "..", "examples", "example.jl")
+
+Literate.markdown(example_src, gen_content_dir, name="example")
 
 About = "Introduction" => "index.md"
 
