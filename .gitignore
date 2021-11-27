@@ -25,12 +25,13 @@ Manifest.toml
 
 # Jupyter notebooks
 .ipynb_checkpoints
-
-# As using jupytext
 *.ipynb
 
 # Docs
 docs/build/
+docs/src/example.md
+docs/src/testsgns.md
+docs/src/timing.md
 
 # Mac OS
 .DS_Store
