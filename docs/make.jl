@@ -21,7 +21,7 @@ About = "Introduction" => "index.md"
 
 Installation = "Installation" => "installation.md"
 
-Examples = "Examples" => ["examples.md", "example.md", "testsgns.md",
+Examples = "Examples" => ["example.md", "testsgns.md",
                           "timing.md", "splint.md"]
 
 Functions = "Available functions" => "functions.md"
