@@ -19,5 +19,5 @@ To install QCDNUM.jl, start Julia and run
 
 ```julia
 julia> using Pkg
-julia> pkg"add https://github.com/cescalara/QCDNUM.jl.git"
+julia> pkg"add QCDNUM"
 ```
