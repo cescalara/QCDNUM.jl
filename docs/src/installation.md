@@ -10,7 +10,7 @@ In the Julia REPL:
 
 ```@repl
 using Pkg
-Pkg.add(url="https://github.com/cescalara/QCDNUM.jl.git")
+pkg"add QCDNUM"
 ```
 
 ## Development installation 
