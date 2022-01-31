@@ -29,7 +29,7 @@ Evolve the flavour pdf set.
 # Arguments
 - `itype::Integer`: select un-polarised (1), polarised (2) or 
 time-like (3) evolution.
-- `func`: User-defined function that returns input `x * f_j(x)` 
+- `func::Base.CFunction`: User-defined function that returns input `x * f_j(x)` 
 at `iq0`. `j` is from `0` to `2 * nf`.
 - `def::Array{Float64}`: input array containing the contribution of 
 quark species `i` to the input distribution `j`.
@@ -39,7 +39,7 @@ quark species `i` to the input distribution `j`.
 - `epsi::Float64`: max deviation of the quadratic spline interpolation 
 from linear interpolation mid-between grid points.
 """
-function evolfg(itype::Integer, func, def::Array{Float64}, iq0::Integer)
+function evolfg(itype::Integer, func::Base.CFunction, def::Array{Float64}, iq0::Integer)
 
     itype = Ref{Int32}(itype)
     iq0 = Ref{Int32}(iq0)
@@ -70,7 +70,7 @@ singlet, valence non-singlet and +/- q_ns singlets respectively.
 - `epsi::Float64`: Maximum deviation of the quadratic spline from 
 linear interpolation mid-between the grid points.
 """
-function evsgns(itype::Integer, func, isns::Array{Int32,1}, n::Integer, iq0::Integer)
+function evsgns(itype::Integer, func::Base.CFunction, isns::Array{Int32,1}, n::Integer, iq0::Integer)
 
     itype = Ref{Int32}(itype)
     n = Ref{Int32}(n)

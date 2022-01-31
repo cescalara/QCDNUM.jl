@@ -129,10 +129,10 @@ must have the signature fun(ix::Integer, iq::Integer, first::Boolean).
 
 # Arguments
 - `iasp::Integer`: address of the spline object
-- `fun::Ptr{Nothing}`: function to be splined
+- `fun::Base.CFunction`: function to be splined
 - `rs::Float64`: set a sqrt(s) cut - 0 for no kinematic cut 
 """
-function ssp_s2fill(iasp::Integer, fun::Ptr{Nothing}, rs::Float64)
+function ssp_s2fill(iasp::Integer, fun::Base.CFunction, rs::Float64)
 
     iasp = Ref{Int32}(iasp)
     rs = Ref{Float64}(rs)
