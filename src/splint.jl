@@ -129,10 +129,10 @@ must have the signature fun(ix::Integer, iq::Integer, first::Boolean).
 
 # Arguments
 - `iasp::Integer`: address of the spline object
-- `fun::Ptr{Nothing}`: function to be splined
+- `fun::Union{Base.CFunction, Ptr{Nothing}}`: function to be splined
 - `rs::Float64`: set a sqrt(s) cut - 0 for no kinematic cut 
 """
-function ssp_s2fill(iasp::Integer, fun::Ptr{Nothing}, rs::Float64)
+function ssp_s2fill(iasp::Integer, fun::Union{Base.CFunction, Ptr{Nothing}}, rs::Float64)
 
     iasp = Ref{Int32}(iasp)
     rs = Ref{Float64}(rs)
@@ -151,10 +151,10 @@ must have the signature fun(ix::Integer, iq::Integer, first::Boolean).
 
 # Arguments
 - `iasp::Integer`: address of the spline object
-- `fun::Ptr{Nothing}`: function to be splined
+- `fun::Union{Base.CFunction, Ptr{Nothing}}`: function to be splined
 - `iq::Integer`: fixed iq value to pass to fun
 """
-function ssp_sxfill(iasp::Integer, fun::Ptr{Nothing}, iq::Integer)
+function ssp_sxfill(iasp::Integer, fun::Union{Base.CFunction, Ptr{Nothing}}, iq::Integer)
 
     iasp = Ref{Int32}(iasp)
     iq = Ref{Int32}(iq)
@@ -173,10 +173,10 @@ must have the signature fun(ix::Integer, iq::Integer, first::Boolean).
 
 # Arguments
 - `iasp::Integer`: address of the spline object
-- `fun::Ptr{Nothing}`: function to be splined
+- `fun::Union{Base.CFunction, Ptr{Nothing}}`: function to be splined
 - `ix::Integer`: fixed ix value to pass to fun
 """
-function ssp_sqfill(iasp::Integer, fun::Ptr{Nothing}, ix::Integer)
+function ssp_sqfill(iasp::Integer, fun::Union{Base.CFunction, Ptr{Nothing}}, ix::Integer)
 
     iasp = Ref{Int32}(iasp)
     ix = Ref{Int32}(ix)

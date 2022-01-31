@@ -29,8 +29,8 @@ Evolve the flavour pdf set.
 # Arguments
 - `itype::Integer`: select un-polarised (1), polarised (2) or 
 time-like (3) evolution.
-- `func`: User-defined function that returns input `x * f_j(x)` 
-at `iq0`. `j` is from `0` to `2 * nf`.
+- `func::Union{Base.CFunction, Ptr{Nothing}}`: User-defined function 
+that returns input `x * f_j(x)` at `iq0`. `j` is from `0` to `2 * nf`.
 - `def::Array{Float64}`: input array containing the contribution of 
 quark species `i` to the input distribution `j`.
 - `iq0::Integer`: grid index of the starting scale `mu_0^2`.
@@ -39,7 +39,7 @@ quark species `i` to the input distribution `j`.
 - `epsi::Float64`: max deviation of the quadratic spline interpolation 
 from linear interpolation mid-between grid points.
 """
-function evolfg(itype::Integer, func, def::Array{Float64}, iq0::Integer)
+function evolfg(itype::Integer, func::Union{Base.CFunction, Ptr{Nothing}}, def::Array{Float64}, iq0::Integer)
 
     itype = Ref{Int32}(itype)
     iq0 = Ref{Int32}(iq0)
@@ -70,7 +70,7 @@ singlet, valence non-singlet and +/- q_ns singlets respectively.
 - `epsi::Float64`: Maximum deviation of the quadratic spline from 
 linear interpolation mid-between the grid points.
 """
-function evsgns(itype::Integer, func, isns::Array{Int32,1}, n::Integer, iq0::Integer)
+function evsgns(itype::Integer, func::Union{Base.CFunction, Ptr{Nothing}}, isns::Array{Int32,1}, n::Integer, iq0::Integer)
 
     itype = Ref{Int32}(itype)
     n = Ref{Int32}(n)
@@ -88,7 +88,7 @@ end
 
 Prototype parallel version on evsgns.
 """
-function evsgnsp(itype::Integer, func, isns::Array{Int32,1}, n::Integer, iq0::Integer, jrun::Integer)
+function evsgnsp(itype::Integer, func::Union{Base.CFunction, Ptr{Nothing}}, isns::Array{Int32,1}, n::Integer, iq0::Integer, jrun::Integer)
 
     itype = Ref{Int32}(itype)
     n = Ref{Int32}(n)
@@ -109,7 +109,7 @@ Create a user-defined type-5 pdfset (same type as the output
 of evsgns). 
 
 # Arguments
-- `fun`: User-defined function with the signature 
+- `fun::Union{Base.CFunction, Ptr{Nothing}}`: User-defined function with the signature 
 fun(ipdf::Integer, x::Float64, qq::Float64, first::UInt8)::Float64
 specifying the values at x and qq of pdfset ipdf.
 - `iset::Integer`: Pdfset identifier, between 1 and 24.
@@ -121,7 +121,7 @@ to catch matching discontinuities.
 - `epsi::Float64`: Maximum deviation of the quadratic spline from 
 linear interpolation mid-between the grid points.
 """
-function usrpdf(fun, iset::Integer, n::Integer, offset::Float64)
+function usrpdf(fun::Union{Base.CFunction, Ptr{Nothing}}, iset::Integer, n::Integer, offset::Float64)
 
     iset = Ref{Int32}(iset)
     n = Ref{Int32}(n)
