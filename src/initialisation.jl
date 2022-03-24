@@ -79,7 +79,7 @@ end
 
 
 """
-    setint(param, val)
+    setint(param, ival)
 
 Set or get QCDNUM integer parameters.
 
@@ -88,13 +88,39 @@ Set or get QCDNUM integer parameters.
 evolutions in backwards iteration), "tlmc" (time-like matching 
 conditions), "nopt" (number of perturbative terms) or "edbg" 
 (evolution loop debug printout).
-- `val::Integer`: Value to set.
+- `ival::Integer`: Value to set.
 """
-function setint(param::String, val::Integer)
+function setint(param::String, ival::Integer)
 
-    val = Ref{Int32}(val)
+    ival = Ref{Int32}(ival)
 
-    @ccall setint_(param::Cstring, val::Ref{Int32})::Nothing
+    @ccall setint_(param::Cstring, ival::Ref{Int32})::Nothing
 
     nothing
 end
+
+"""
+    setval(param, val)
+
+Set or get QCDNUM parameters.
+
+# Arguments
+- `param::String`: Name of parameter. Can be "null" (result of 
+calc that cannot be performed), "epsi" (tolerance level in float
+comparison |x-y| < epsi), "epsg" (numerical accuracy of Gauss 
+integration in weight table calc), "elim" (allowed diff between 
+quadratic and linear spline interpolation mid-between x grid 
+points - to disable, set elim<=0), "alim" (Max allowed value of 
+alpha_s(mu^2)), "qmin" (smallest possible boundary of mu^2 grid)
+"qmax" (largest possible boundary of mu^2 grid).
+- `val::Float64`: Value to set.
+"""
+function setval(param::String, val::Float64)
+
+    val = Ref{Float64}(val)
+
+    @ccall setint_(param::Cstring, val::Ref{Float64})::Nothing
+
+    nothing
+end
+
