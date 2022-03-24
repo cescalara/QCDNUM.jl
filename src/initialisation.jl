@@ -119,7 +119,7 @@ function setval(param::String, val::Float64)
 
     val = Ref{Float64}(val)
 
-    @ccall setint_(param::Cstring, val::Ref{Float64})::Nothing
+    @ccall setval_(param::Cstring, val::Ref{Float64})::Nothing
 
     nothing
 end
