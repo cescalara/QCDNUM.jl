@@ -161,3 +161,62 @@ function ievtyp(iset::Integer)
 
     ityp[]
 end
+
+
+"""
+    splchk(iset, id, iq)
+
+Return for a basis pdf at a given Q^2 grid point the 
+maximum deviation between a linear interpolation and 
+the spline interpolation used by QCDNUM.
+
+To be used if having issues with evolfg or extpdf.
+
+# Arguments
+`iset::Integer`: PDF set identifier [1-24]
+`id::Integer`: Identifier of a basis PDF |e^±|
+`iq::Integer`: Index of a Q^2 grid point
+
+# Returns
+`epsi::Float64`: Value of the max deviation 
+"""
+function splchk(iset::Integer, id::Integer, iq::Integer)
+
+    iset = Ref{Int32}(iset)
+    id = Ref{Int32}(id)
+    iq = Ref{Int32}(iq)
+
+    epsi = @ccall splchk_(iset::Ref{Int32}, id::Ref{Int32},
+                          iq::Ref{Int32})::Float64
+
+    epsi[]
+end
+
+"""
+    fsplne(iset, id, x, iq)
+
+Spline interpolation of a basis PDF in x, at the grid
+point `iq`. Provided as a diagnostic tool to investigate
+possible quadratic spline oscillations.
+
+# Arguments
+`iset::Integer`: PDF set identifier [1-24]
+`id::Integer`: Identifier of a basis pdf |e^±|
+`x::Float64`: x value
+`iq::Integer`: Index of a Q^2 grid point
+
+# Returns
+`pdf::Float64`: pdf value
+"""
+function fsplne(iset::Integer, id::Integer, x::Float64, iq::Integer)
+
+    iset = Ref{Int32}(iset)
+    id = Ref{Int32}(id)
+    x = Ref{Float64}(x)
+    iq = Ref{Int32}(iq)
+
+    pdf = @ccall fsplne_(iset::Ref{Int32}, id::Ref{Int32},
+                         x::Ref{Float64}, iq::Ref{Int32})::Float64
+   
+   pdf[] 
+end
