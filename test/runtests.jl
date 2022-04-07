@@ -26,9 +26,14 @@ end
         @test QCDNUM.setint(opt, 1) == nothing
     end
 
-    val_options = ["epsi", "epsg", "elim", "alim", "qmin", "qmax"]
+    val_options = ["epsi", "epsg", "elim", "alim"]
     for opt in val_options
         @test QCDNUM.setval(opt, 1.0e-4) == nothing
+    end
+
+    val_options = ["qmin", "qmax"]
+    for opt in val_options
+        @test QCDNUM.setval(opt, 1.0) == nothing
     end
     
 end
