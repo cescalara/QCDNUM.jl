@@ -15,7 +15,8 @@ function qcinit(lun::Integer, output_file::String)
 
     lun = Ref{Int32}(lun)
  
-    @ccall qcinit_(lun::Ref{Int32}, output_file::Cstring)::Nothing
+    @ccall qcinit_(lun::Ref{Int32}, output_file::Ptr{UInt8},
+                   sizeof(output_file)::Csize_t)::Nothing
     
     nothing
 end
@@ -50,7 +51,8 @@ function qstore(action::String, i::Integer, val::Float64)
     i = Ref{Int32}(i)
     val = Ref{Float64}(val)
     
-    @ccall qstore_(action::Cstring, i::Ref{Int32}, val::Ref{Float64})::Nothing
+    @ccall qstore_(action::Ptr{UInt8}, i::Ref{Int32}, val::Ref{Float64},
+                   sizeof(action)::Csize_t)::Nothing
 
     nothing
 end
@@ -72,7 +74,8 @@ function qstore(action::String, i::Integer)
     i = Ref{Int32}(i)
     val = Ref{Float64}()
     
-    @ccall qstore_(action::Cstring, i::Ref{Int32}, val::Ref{Float64})::Nothing
+    @ccall qstore_(action::Ptr{UInt8}, i::Ref{Int32}, val::Ref{Float64},
+                   sizeof(action)::Csize_t)::Nothing
 
     val[]
 end

@@ -33,7 +33,8 @@ function dmpwgt(itype::Integer, lun::Integer, filename::String)
     itype = Ref{Int32}(itype)
     lun = Ref{Int32}(lun)
     
-    @ccall dmpwgt_(itype::Ref{Int32}, lun::Ref{Int32}, filename::Cstring)::Nothing
+    @ccall dmpwgt_(itype::Ref{Int32}, lun::Ref{Int32}, filename::Ptr{UInt8},
+                   sizeof(filename)::Csize_t)::Nothing
     
     nothing
 end
@@ -54,8 +55,9 @@ function readwt(lun::Integer, filename::String)
     idnum1 = Ref{Int32}()
     idnum2 = Ref{Int32}()
     
-    @ccall readwt_(lun::Ref{Int32}, filename::Cstring, idnum1::Ref{Int32},
-                   idnum2::Ref{Int32}, nwds::Ref{Int32}, ierr::Ref{Int32})::Nothing
+    @ccall readwt_(lun::Ref{Int32}, filename::Ptr{UInt8}, idnum1::Ref{Int32},
+                   idnum2::Ref{Int32}, nwds::Ref{Int32}, ierr::Ref{Int32},
+                   sizeof(filename)::Csize_t)::Nothing
     
     nwds[], ierr[]
   
@@ -70,7 +72,8 @@ function wtfile(itype::Integer, filename::String)
 
     itype = Ref{Int32}(itype)
 
-    @ccall wtfile_(itype::Ref{Int32}, filename::Cstring)::Nothing
+    @ccall wtfile_(itype::Ref{Int32}, filename::Ptr{UInt8},
+                   sizeof(filename)::Csize_t)::Nothing
     
     nothing
 end

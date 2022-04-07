@@ -28,7 +28,7 @@ end
 
     val_options = ["epsi", "epsg", "elim", "alim", "qlim"]
     for opt in val_options
-        @test QCDNUM.setval(opt, 1.0e-4)
+        @test QCDNUM.setval(opt, 1.0e-4) == nothing
     end
     
 end
