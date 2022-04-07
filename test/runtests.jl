@@ -21,10 +21,15 @@ end
     @test out == 999.9
 
     # Set QCDNUM params
-    #options = ["iter", "tlmc", "nopt", "edbg"]
-    #for opt in options
-    #    @test QCDNUM.setint(opt, 1) == nothing
-    #end
+    int_options = ["iter", "tlmc", "nopt", "edbg"]
+    for opt in int_options
+        @test QCDNUM.setint(opt, 1) == nothing
+    end
+
+    val_options = ["epsi", "epsg", "elim", "alim", "qlim"]
+    for opt in val_options
+        @test QCDNUM.setval(opt, 1.0)
+    end
     
 end
 

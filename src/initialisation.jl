@@ -94,7 +94,7 @@ function setint(param::String, ival::Integer)
 
     ival = Ref{Int32}(ival)
 
-    @ccall setint_(param::Cstring, ival::Ref{Int32})::Nothing
+    @ccall setint_(param::Ptr{UInt8}, ival::Ref{Int32}, sizeof(param)::Csize_t)::Nothing
 
     nothing
 end
@@ -119,7 +119,7 @@ function setval(param::String, val::Float64)
 
     val = Ref{Float64}(val)
 
-    @ccall setval_(param::Cstring, val::Ref{Float64})::Nothing
+    @ccall setval_(param::Ptr{UInt8}, val::Ref{Float64}, sizeof(param):Csize_t)::Nothing
 
     nothing
 end
