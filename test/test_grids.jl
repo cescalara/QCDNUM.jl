@@ -64,4 +64,9 @@ using Test
          rm(string("test", string(itype), ".wgt"))
     end
 
+    nwtot, nwuse = QCDNUM.nwused()
+
+    @test nwtot == 2e6
+    @test nwuse < nwtot
+    
 end
