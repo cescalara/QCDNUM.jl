@@ -21,11 +21,19 @@ using Test
     x = QCDNUM.xfrmix(ix)
     @test x ≈ 0.1
 
+    # Check x, ix
+    @test QCDNUM.xxatix(x, ix)
+    @test !QCDNUM.xxatix(0.3, 1)
+
+    # Similarly for q2 grid
     iq = QCDNUM.iqfrmq(1000.0)
     @test iq == 36
 
     q = QCDNUM.qfrmiq(iq)
     @test q == 877.3066621237417
+
+    @test QCDNUM.qqatiq(q, iq)
+    @test !QCDNUM.qqatiq(100.0, 1)
 
     # Grid params
     out = QCDNUM.grpars()
