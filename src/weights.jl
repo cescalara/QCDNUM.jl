@@ -77,3 +77,24 @@ function wtfile(itype::Integer, filename::String)
     
     nothing
 end
+
+"""
+    nwused()
+
+Returns the szie `nwtot` of the QCDNUM store (the parameter nwf0
+in qcdnum.inc) and the number of words used, `nwuse`.
+
+The output argument `ndummy` is not used at present.
+"""
+function nwused()
+
+    nwtot = Ref{Int32}()
+    nwuse = Ref{Int32}()
+
+    ndummy = Ref{Int32}()
+    
+    @ccall nwused_(nwtot::Ref{Int32}, nwuse::Ref{Int32},
+                   ndummy::Ref{Int32})::Nothing
+
+    nwtot[], nwuse[]
+end

@@ -90,6 +90,24 @@ function xfrmix(ix::Integer)
 end
 
 """
+    xxatix(x, ix)
+
+Check if `x` coincides with a grid point `ix`.
+
+# Returns
+`out::Bool`: `true` or `false`
+"""
+function xxatix(x::Float64, ix::Integer)
+
+    x = Ref{Float64}(x)
+    ix = Ref{Int32}(ix)
+
+    out = @ccall xxatix_(x::Ref{Float64}, ix::Ref{Int32})::UInt8
+
+    Bool(out[])
+end
+
+"""
     iqfrmq(q2)
 
 Get grid point index of the closest grid point at or 
@@ -116,6 +134,24 @@ function qfrmiq(iq::Integer)
     q2 = @ccall qfrmiq_(iq::Ref{Int32})::Float64
 
     q2[]    
+end
+
+"""
+    qqatiq(q, iq)
+
+Check if `q2` coincides with a grid point `iq`.
+
+# Returns
+`out::Bool`: `true` or `false`
+"""
+function qqatiq(q::Float64, iq::Integer)
+
+    q = Ref{Float64}(q)
+    iq = Ref{Int32}(iq)
+
+    out = @ccall qqatiq_(q::Ref{Float64}, iq::Ref{Int32})::UInt8
+
+    Bool(out[])
 end
 
 """

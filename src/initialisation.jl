@@ -7,17 +7,47 @@ Initialise QCDNUM - should be called before anything else.
 - `lun::Integer`: the output logical unit number. When set to 6, 
 the QCDNUM messages appear on the standard output. When set to -6, 
 the QCDNUM banner printout is suppressed.
-- `filename::String`: the output filename to store log.
+- `filename::String`: the output filename to store log. Irrelevant
+when `lun` is set to 6/-6
 """
-function qcinit(lun::Integer, output_file::String)
+function qcinit(lun::Integer, filename::String)
 
     qcdnum = Libdl.dlopen(libqcdnum, RTLD_NOW | RTLD_GLOBAL)
 
     lun = Ref{Int32}(lun)
  
-    @ccall qcinit_(lun::Ref{Int32}, output_file::Ptr{UInt8},
-                   sizeof(output_file)::Csize_t)::Nothing
+    @ccall qcinit_(lun::Ref{Int32}, filename::Ptr{UInt8},
+                   sizeof(filename)::Csize_t)::Nothing
     
+    nothing
+end
+
+"""
+    setlun(lun, filename)
+
+Redirect the QCDNUM messages. Arguments are the same as for `qcinit`,
+but it can be called at any point in the program after `qcinit`. 
+
+# Arguments
+- `lun::Integer`: the output logical unit number. When set to 6, 
+the QCDNUM messages appear on the standard output. When set to -6, 
+the QCDNUM banner printout is suppressed.
+- `filename::String`: the output filename to store log. Irrelevant
+when `lun` is set to 6/-6
+"""
+function setlun(lun::Integer, filename::String)
+
+    if lun < 1 || lun > 99
+
+        throw(DomainError(lun, "lun must be in the range [1, 99]"))
+        
+    end
+    
+    lun = Ref{Int32}(lun)
+
+    @ccall setlun_(lun::Ref{Int32}, filename::Ptr{UInt8},
+                   sizeof(filename)::Csize_t)::Nothing
+
     nothing
 end
 
@@ -25,7 +55,9 @@ end
     nxtlun(lmin)
 
 Get next free logical unit number above `max(lmin, 10)`. 
-Returns 0 if there is no free logical unit.
+Returns 0 if there is no free logical unit. Can be called 
+before or after `qcinit`. Handy if you want to open a file 
+on a unit that is guaranteed to be free.
 """
 function nxtlun(lmin::Integer)
     
@@ -84,7 +116,7 @@ end
 """
     setint(param, ival)
 
-Set or get QCDNUM integer parameters.
+Set QCDNUM integer parameters.
 
 # Arguments
 - `param::String`: Name of parameter. Can be "iter" (number of 
@@ -97,15 +129,40 @@ function setint(param::String, ival::Integer)
 
     ival = Ref{Int32}(ival)
 
-    @ccall setint_(param::Ptr{UInt8}, ival::Ref{Int32}, sizeof(param)::Csize_t)::Nothing
+    @ccall setint_(param::Ptr{UInt8}, ival::Ref{Int32},
+                   sizeof(param)::Csize_t)::Nothing
 
     nothing
 end
 
 """
+    getint(param)
+
+Get QCDNUM integer parameters.
+
+# Arguments
+- `param::String`: Name of parameter. Can be "iter" (number of 
+evolutions in backwards iteration), "tlmc" (time-like matching 
+conditions), "nopt" (number of perturbative terms) or "edbg" 
+(evolution loop debug printout).
+
+# Returns
+- `ival::Int32`: Integer value that is read
+"""
+function getint(param::String)
+
+    ival = Ref{Int32}()
+
+    @ccall getint_(param::Ptr{UInt8}, ival::Ref{Int32},
+                  sizeof(param)::Csize_t)::Nothing
+    
+    ival[]
+end
+
+"""
     setval(param, val)
 
-Set or get QCDNUM parameters.
+Set QCDNUM parameters.
 
 # Arguments
 - `param::String`: Name of parameter. Can be "null" (result of 
@@ -122,8 +179,37 @@ function setval(param::String, val::Float64)
 
     val = Ref{Float64}(val)
 
-    @ccall setval_(param::Ptr{UInt8}, val::Ref{Float64}, sizeof(param)::Csize_t)::Nothing
+    @ccall setval_(param::Ptr{UInt8}, val::Ref{Float64},
+                   sizeof(param)::Csize_t)::Nothing
 
     nothing
 end
 
+
+"""
+    getval(param)
+
+Get QCDNUM parameters.
+
+# Arguments
+- `param::String`: Name of parameter. Can be "null" (result of 
+calc that cannot be performed), "epsi" (tolerance level in float
+comparison |x-y| < epsi), "epsg" (numerical accuracy of Gauss 
+integration in weight table calc), "elim" (allowed diff between 
+quadratic and linear spline interpolation mid-between x grid 
+points - to disable, set elim<=0), "alim" (Max allowed value of 
+alpha_s(mu^2)), "qmin" (smallest possible boundary of mu^2 grid)
+"qmax" (largest possible boundary of mu^2 grid).
+
+# Returns
+- `val::Float64`: Value.
+"""
+function getval(param::String)
+
+    val = Ref{Float64}()
+
+    @ccall getval_(param::Ptr{UInt8}, val::Ref{Float64},
+                   sizeof(param)::Csize_t)::Nothing
+
+    val[]
+end
