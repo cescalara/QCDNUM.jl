@@ -5,7 +5,7 @@ include("pdf_functions.jl")
 
 @testset "SPLINT" begin
 
-        # Initialise
+    # Initialise
     QCDNUM.qcinit(-6, "")
     
     # C-pointer to func
@@ -41,6 +41,9 @@ include("pdf_functions.jl")
 
     # Initialise
     QCDNUM.ssp_spinit(100)
+    ver = QCDNUM.isp_spvers()
+    @test typeof(ver) == Int32
+    @test ver > 20210000
 
     # Store iset and ipdf
     QCDNUM.ssp_uwrite(1, Float64(iset))
@@ -67,11 +70,24 @@ include("pdf_functions.jl")
     @test v2 ≈ 1e4
     @test n == nu * nv
 
+    # Store extra info
+    @test QCDNUM.ssp_spsetval(iasp, 1, 123456.789) == nothing
+    
+    # Save and load from file
+    @test QCDNUM.ssp_spdump(iasp, "test_spline.dat") == nothing
+    sleep(1)
+    iasp_read = QCDNUM.isp_spread("test_spline.dat")
+    @test QCDNUM.isp_splinetype(iasp_read) == type
+    @test QCDNUM.dsp_spgetval(iasp_read, 1) == 123456.789
+
+    rm("test_spline.dat")
+    
     # Evalute function and integral
     x = 0.1
     q = 100.0
     f = QCDNUM.dsp_funs2(iasp, x, q, 1)
     @test isapprox(f, 0.408, rtol=0.01)
+    @test f == QCDNUM.dsp_funs2(iasp_read, x, q, 1)
 
     x1 = 0.01
     x2 = 0.1
@@ -95,7 +111,15 @@ include("pdf_functions.jl")
         @test QCDNUM.ssp_extrapv(iasp, i) == nothing
     end
 
+    # Memory checks
+    nw = QCDNUM.isp_spsize(iasp)
+    nw_tot = QCDNUM.isp_spsize(0)
+    @test nw > 0
+    @test nw < nw_tot
+    
     @test QCDNUM.ssp_erase(iasp) == nothing
+    nw = QCDNUM.isp_spsize(iasp)
+    @test nw == 0
     
     # 1D spline
     iasp = QCDNUM.isp_sxmake(5)
@@ -103,6 +127,5 @@ include("pdf_functions.jl")
     
     iasp = QCDNUM.isp_sqmake(5)
     @test typeof(iasp) == Int32
-    
     
 end
