@@ -6,9 +6,9 @@ include("pdf_functions.jl")
 @testset "Evolution & interpolation" begin
 
     # C-pointer to func
-    func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
-    func_ext_c = @cfunction(func_ext, Float64, (Ref{Int32}, Ref{Float64}, Ref{Float64}, Ref{UInt8}))
-    func_usr_c = @cfunction(func_usr, Float64, (Ref{Int32}, Ref{Float64}, Ref{Float64}, Ref{UInt8}))
+    func_c = @cfunction($func, Float64, (Ref{Int32}, Ref{Float64}))
+    func_ext_c = @cfunction($func_ext, Float64, (Ref{Int32}, Ref{Float64}, Ref{Float64}, Ref{UInt8}))
+    func_usr_c = @cfunction($func_usr, Float64, (Ref{Int32}, Ref{Float64}, Ref{Float64}, Ref{UInt8}))
 
     # Initialise
     QCDNUM.qcinit(-6, "")

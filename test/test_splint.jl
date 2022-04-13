@@ -9,7 +9,7 @@ include("pdf_functions.jl")
     QCDNUM.qcinit(-6, "")
     
     # C-pointer to func
-    func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
+    func_c = @cfunction($func, Float64, (Ref{Int32}, Ref{Float64}))
 
     # Initialise
     QCDNUM.qcinit(-6, "")
@@ -18,6 +18,7 @@ include("pdf_functions.jl")
     nx = QCDNUM.gxmake(Float64.([1.0e-4]), Int32.([1]), 1, 100, 3)
     nq = QCDNUM.gqmake(Float64.([2e0, 1e4]), Float64.([1e0, 1e0]), 2, 50)
     nw = QCDNUM.fillwt(1)
+    nw = QCDNUM.zmfillw()
 
     # Set parameters
     QCDNUM.setord(3)
@@ -34,7 +35,7 @@ include("pdf_functions.jl")
     @test typeof(eps) == Float64
 
     # SPLINT
-    func_sp_c = @cfunction(func_sp, Float64, (Ref{Int32}, Ref{Int32}, Ref{UInt8}))
+    func_sp_c = @cfunction($func_sp, Float64, (Ref{Int32}, Ref{Int32}, Ref{UInt8}))
     
     iset = 1
     ipdf = 1
@@ -111,6 +112,12 @@ include("pdf_functions.jl")
         @test QCDNUM.ssp_extrapv(iasp, i) == nothing
     end
 
+    # Rs cut
+    rsc = QCDNUM.dsp_rscut(iasp)
+    rsc_max = QCDNUM.dsp_rsmax(iasp, rsc)
+    @test rsc == 0.0
+    @test rsc_max == 0.0
+    
     # Memory checks
     nw = QCDNUM.isp_spsize(iasp)
     nw_tot = QCDNUM.isp_spsize(0)
@@ -127,5 +134,17 @@ include("pdf_functions.jl")
     
     iasp = QCDNUM.isp_sqmake(5)
     @test typeof(iasp) == Int32
+
+    # Fast strcuture function splines
+    c = [0., 0., 1., 0., 1., 0., 0., 0., 1., 0., 1., 0., 0.]
+
+    ia = QCDNUM.isp_s2make(20, 20)
+    xnd = QCDNUM.ssp_unodes(ia, 20, 0)
+    qnd = QCDNUM.ssp_vnodes(ia, 20, 0)
+    QCDNUM.ssp_erase(ia);
+
+    iasf = QCDNUM.isp_s2user(xnd, 20, qnd, 20)
+    @test iasf > 0
+    @test QCDNUM.ssp_s2f123(iasf, 1, c, 1, 0.0) == nothing
     
 end
