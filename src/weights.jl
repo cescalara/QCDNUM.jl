@@ -43,7 +43,6 @@ end
     readwt(lun, filename)
 
 Read weight tables from filename.
-TODO: Fix implementation which currently crashes.
 """
 function readwt(lun::Integer, filename::String)
 
@@ -51,7 +50,7 @@ function readwt(lun::Integer, filename::String)
     ierr = Ref{Int32}()
     nwds = Ref{Int32}()
 
-    # For now-obsolete integer id vars
+    # For now, obsolete integer id vars
     idnum1 = Ref{Int32}()
     idnum2 = Ref{Int32}()
     
@@ -59,8 +58,7 @@ function readwt(lun::Integer, filename::String)
                    idnum2::Ref{Int32}, nwds::Ref{Int32}, ierr::Ref{Int32},
                    sizeof(filename)::Csize_t)::Nothing
     
-    nwds[], ierr[]
-  
+    nwds[], ierr[]  
 end
 
 """
