@@ -54,14 +54,23 @@ using Test
 
     # Weights
     for itype in [1, 2, 3]
+
         nw = QCDNUM.fillwt(itype)
         @test typeof(nw) == Int32
-        @test QCDNUM.wtfile(itype, string("test", string(itype), ".wgt")) == nothing
+
+        lun = QCDNUM.nxtlun(0)
+        @test QCDNUM.dmpwgt(itype, lun, string("test_dmpwgt", string(itype), ".wgt")) == nothing
+        @test QCDNUM.wtfile(itype, string("test_wtfile", string(itype), ".wgt")) == nothing
         sleep(1)
+        
+        lun = QCDNUM.nxtlun(0)
+        nwds, ierr = QCDNUM.readwt(lun, string("test_dmpwgt", string(itype), ".wgt"))
+        @test ierr == 0
     end
 
     for itype in [1, 2, 3]
-         rm(string("test", string(itype), ".wgt"))
+        rm(string("test_wtfile", string(itype), ".wgt"))
+        rm(string("test_dmpwgt", string(itype), ".wgt"))
     end
 
     nwtot, nwuse = QCDNUM.nwused()
