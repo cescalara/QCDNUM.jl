@@ -1,4 +1,3 @@
-
 """
     asfunc(r2)
 
@@ -19,6 +18,36 @@ function asfunc(r2::Float64)
                           ierr::Ref{Int32})::Float64
     
     alphas, nf[], ierr[] 
+end
+
+"""
+    altabn(iset, iq, n)
+
+Returns the value of (alpha_S / 2pi)^n, properly truncated, at the 
+factorisation scale mu_F^2.
+
+# Arguments
+- `iset::Integer`: identifier of tha active alpha_S table (0) or pdf set (1-24).
+- `iq::Integer`: index of q2 grid point
+- `n::Integer`: power of alpha_S for the different perturbative series.
+
+# Returns
+- `asn::Float64`: value of (alpha_S / 2pi)^n, 0 if error.
+- `ierr::Integer`: set, on exit, to 1 if `iq` is close to or below the value of 
+Lambda^2, and to 2 if `iq` is outside the grid boundaries. 
+"""
+function altabn(iset::Integer, iq::Integer, n::Integer)
+
+    iset = Ref{Int32}(iset)
+    iq = Ref{Int32}(iq)
+    n = Ref{Int32}(n)
+    
+    ierr = Ref{Int32}()
+
+    asn = @ccall altabn_(iset::Ref{Int32}, iq::Ref{Int32}, n::Ref{Int32},
+                         ierr::Ref{Int32})::Float64
+
+    asn[], ierr[]
 end
 
 """
@@ -88,18 +117,65 @@ end
 
 Prototype parallel version on evsgns.
 """
-function evsgnsp(itype::Integer, func::Union{Base.CFunction, Ptr{Nothing}}, isns::Array{Int32,1}, n::Integer, iq0::Integer, jrun::Integer)
+# function evsgnsp(itype::Integer, func::Union{Base.CFunction, Ptr{Nothing}}, isns::Array{Int32,1}, n::Integer, iq0::Integer, jrun::Integer)
 
-    itype = Ref{Int32}(itype)
+#     itype = Ref{Int32}(itype)
+#     n = Ref{Int32}(n)
+#     iq0 = Ref{Int32}(iq0)
+#     jrun = Ref{Int32}(jrun)
+#     epsi = Ref{Float64}()
+    
+#     @ccall evsgnsp_(itype::Ref{Int32}, func::Ptr{Cvoid}, isns::Ref{Int32},
+#                    n::Ref{Int32}, iq0::Ref{Int32}, epsi::Ref{Float64}, jrun::Ref{Int32})::Nothing
+
+#     epsi[]
+# end
+
+"""
+    pdfcpy(iset1, iset2)
+
+Copy pdf set.
+"""
+function pdfcpy(iset1::Integer, iset2::Integer)
+
+    iset1 = Ref{Int32}(iset1)
+    iset2 = Ref{Int32}(iset2)
+
+    @ccall pdfcpy_(iset1::Ref{Int32}, iset2::Ref{Int32})::Nothing
+
+    nothing
+end
+
+"""
+    extpdf(fun, iset, n, offset)
+
+Import a pdfset from an external source.
+
+# Arguments
+- `fun::Union{Base.CFunction, Ptr{Nothing}}`: User-defined function with the signature 
+fun(ipdf::Integer, x::Float64, qq::Float64, first::UInt8)::Float64
+specifying the values at x and qq of pdfset ipdf.
+- `iset::Integer`: Pdfset identifier, between 1 and 24.
+- `n::Integer`: Number of pdf tables in addition to gluon tables.
+- `offset::Float64`: Relative offset at the thresholds mu_h^2, used 
+to catch matching discontinuities.
+
+# Returns
+- `epsi::Float64`: Maximum deviation of the quadratic spline from 
+linear interpolation mid-between the grid points.
+"""
+function extpdf(fun::Union{Base.CFunction, Ptr{Nothing}}, iset::Integer, n::Integer, offset::Float64)
+
+    iset = Ref{Int32}(iset)
     n = Ref{Int32}(n)
-    iq0 = Ref{Int32}(iq0)
-    jrun = Ref{Int32}(jrun)
+    offset = Ref{Float64}(offset)
+
     epsi = Ref{Float64}()
     
-    @ccall evsgnsp_(itype::Ref{Int32}, func::Ptr{Cvoid}, isns::Ref{Int32},
-                   n::Ref{Int32}, iq0::Ref{Int32}, epsi::Ref{Float64}, jrun::Ref{Int32})::Nothing
-
-    epsi[]
+    @ccall extpdf_(fun::Ptr{Cvoid}, iset::Ref{Int32}, n::Ref{Int32}, 
+                   offset::Ref{Float64}, epsi::Ref{Float64})::Nothing
+    
+    epsi[]    
 end
 
 """
@@ -126,10 +202,11 @@ function usrpdf(fun::Union{Base.CFunction, Ptr{Nothing}}, iset::Integer, n::Inte
     iset = Ref{Int32}(iset)
     n = Ref{Int32}(n)
     offset = Ref{Float64}(offset)
+
     epsi = Ref{Float64}()
     
     @ccall usrpdf_(fun::Ptr{Cvoid}, iset::Ref{Int32}, n::Ref{Int32}, 
-        offset::Ref{Float64}, epsi::Ref{Float64})::Nothing
+                   offset::Ref{Float64}, epsi::Ref{Float64})::Nothing
     
     epsi[]
 end

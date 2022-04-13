@@ -1,6 +1,9 @@
 using QCDNUM
+"""
+    func(ipdf, x)
 
-# Define a test PDF function and mapping
+A example input pdf function.
+"""
 function func(ipdf, x)::Float64
 
     i = ipdf[]
@@ -40,6 +43,11 @@ function func(ipdf, x)::Float64
     return f
 end
 
+"""
+    func_sgns(ipdf, x)
+
+Test function for use with QCDNUM.evsgns().
+"""
 function func_sgns(ipdf, x)::Float64
     i = ipdf[]
     xb = x[]
@@ -59,6 +67,9 @@ function func_sgns(ipdf, x)::Float64
     return f
 end
 
+"""
+    Defintion of input PDF map.
+"""
 def = Float64.([0., 0., 0., 0., 0.,-1., 0., 1., 0., 0., 0., 0., 0.,     
                 0., 0., 0., 0.,-1., 0., 0., 0., 1., 0., 0., 0., 0.,      
                 0., 0., 0.,-1., 0., 0., 0., 0., 0., 1., 0., 0., 0.,      
@@ -72,8 +83,38 @@ def = Float64.([0., 0., 0., 0., 0.,-1., 0., 1., 0., 0., 0., 0., 0.,
                 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,      
                 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]);
 
-# Define function to read from QCDNUM into spline
-function func_sp(ix, iq, first)::Float64
+"""
+    func_ext(ipdf, x, q, first)
+
+Example function to test out QCDNUM.extpdf(). This is just a long
+way of copying a PDF set.
+"""
+function func_ext(ipdf::Integer, x::Float64, q::Float64, first::UInt8)::Float64
+
+    iset = Int32(QCDNUM.qstore("read", 1))
+   
+    return QCDNUM.fvalxq(iset, ipdf, x, q, 1)
+end
+
+"""
+    func_usr(ipdf, x, q, first)
+
+Example function to test out QCDNUM.usrpdf. This is just a long
+way of copying a  PDF set.
+"""
+function func_usr(ipdf::Integer, x::Float64, q::Float64, first::UInt8)::Float64
+
+    iset = Int32(QCDNUM.qstore("read", 1))
+
+    return QCDNUM.bvalxq(iset, ipdf, x, q, 1)
+end
+
+"""
+    func_sp(ix, iq, first)
+
+Example function to read into SPLINT spline.
+"""
+function func_sp(ix::Integer, iq::Integer, first::UInt8)::Float64
 
     # deref ptrs
     ix = ix[] 
