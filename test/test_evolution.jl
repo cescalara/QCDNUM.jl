@@ -40,12 +40,25 @@ include("pdf_functions.jl")
     # Interpolation
     x = 1e-3
     q = 1e3
+    c = [0., 0., 1., 0., 1., 0., 0., 0., 1., 0., 1., 0., 0.]
+
     pdf = QCDNUM.allfxq(1, x, q, 0, 1)
     @test pdf[1] == 0.0
     @test size(pdf)[1] == 13
 
+    pdfs_xq = QCDNUM.sumfxq(1, c, 0, x, q, 1)
+    @test pdfs_xq > 0
+    
     ix = QCDNUM.ixfrmx(x)
     iq = QCDNUM.iqfrmq(q)
+    
+    pdf = QCDNUM.allfij(1, ix, iq, 0, 1)
+    @test pdf[1] == 0.0
+    @test size(pdf)[1] == 13
+
+    pdfs_ij = QCDNUM.sumfij(1, c, 0, ix, iq, 1)
+    @test pdfs_ij > 0
+    @test isapprox(pdfs_ij, pdfs_xq, rtol=0.1)
     
     for id in 0:12
         pdf_ij = QCDNUM.bvalij(1, id, ix, iq, 1)
@@ -127,6 +140,22 @@ include("pdf_functions.jl")
         pdf_ij_4 = QCDNUM.bvalij(4, id, ix, iq, 1)
         @test isapprox(pdf_ij_1, pdf_ij_4, rtol=0.001)        
     end
-   
+
+    # Fast interpolation - list
+    x_vals = 10 .^ range(-3, stop=-1, length=20)
+    q2_vals = 10 .^ range(1, stop=3, length=20)
+
+    f = QCDNUM.fflist(1, c, 0, x_vals, q2_vals, 1)
+    @test size(f) == size(x_vals)
+
+    try
+        f = QCDNUM.fflist(1, c, 0, x_vals[1:10], q2_vals, 1)
+    catch e
+        @test isa(e, DimensionMismatch)
+    end
+
+    # Fast interpolation - table
+    table = QCDNUM.ftable(1, c, 1, x_vals[1:10], q2_vals, 1)
+    @test size(table) == (size(x_vals[1:10])[1], size(q2_vals)[1])
 
 end
