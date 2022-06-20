@@ -1,6 +1,7 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 Literate = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
+QCDNUM = "4acc4d78-9ad5-435b-99b1-7af0628e6e5b"
 
 [compat]
 Documenter = "0.27"
