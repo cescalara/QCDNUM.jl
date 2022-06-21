@@ -9,7 +9,7 @@ using Test
     include("test_evolution.jl")
     include("test_structure_functions.jl")
     include("test_splint.jl")
-    #include("test_interface.jl")
+    include("test_interface.jl")
     
 end
 
