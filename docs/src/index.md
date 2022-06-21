@@ -10,9 +10,9 @@ QCDNUM.jl is a Julia wrapper for Michiel Botje's [QCDNUM](https://www.nikhef.nl/
 * Work interactively with easy file IO, plotting and debugging in e.g. [Jupyter](https://jupyter.org) notebooks
 * Write more accessible code with the high-level Julia interface provided, in addition to all functions available in QCDNUM
 
-Have you not used QCDNUM before, but are interested to see what QCDNUM.jl can do? Our high-level Julia interface may be more accessible for you. Check out the Quick start example where we demonstrate the main functionality.
+**Have you not used QCDNUM before, but are interested to see what QCDNUM.jl can do?** Our high-level Julia interface may be more accessible for you. Check out the **quick start example** where we demonstrate the main functionality.
 
-Are you a long-time user of QCDNUM in Fortran or C++? All the standard QCDNUM functions have corresponding Julia versions. So, translating your old code or starting a new project should be a quick and intuitive! Check out the QCDNUM example jobs. These are Julia versions of the test jobs of the original QCDNUM. 
+**Are you a long-time user of QCDNUM in Fortran or C++?** All the standard QCDNUM functions have corresponding Julia versions. So, translating your old code or starting a new project should be a quick and intuitive! Check out the **QCDNUM example jobs**. These are Julia versions of the test jobs of the original QCDNUM. 
 
 The source code, along with Julia scripts for all examples can be found in the [GitHub repository](https://github.com/cescalara/QCDNUM.jl).
 
