@@ -47,9 +47,6 @@ end
 
     splint_params = QCDNUM.SPLINTParams()
 
-    # Initialisation
-    @test_nowarn QCDNUM.splint_init(splint_params)
-
     # Test calling init twice
     @test_warn "SPLINT" QCDNUM.splint_init(splint_params)
     
