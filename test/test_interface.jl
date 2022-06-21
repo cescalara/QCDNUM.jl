@@ -47,7 +47,9 @@ end
 
     splint_params = QCDNUM.SPLINTParams()
 
+    warn_string = "SPLINT is already initialised, skipping call to QCDNUM.ssp_spinit()"
+    
     # Test calling init twice
-    @test_warn "SPLINT" QCDNUM.splint_init(splint_params)
+    @test_logs (:warn, warn_string) QCDNUM.splint_init(splint_params)
     
 end
