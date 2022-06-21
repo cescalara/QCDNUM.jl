@@ -11,46 +11,46 @@ include("pdf_functions.jl")
 
 end
 
-# @testset "Grid interface" begin
+@testset "Grid interface" begin
 
-#     # Initialisation
-#     QCDNUM.init()
+    # Initialisation
+    QCDNUM.init()
 
-#     # Grid interface with defaults
-#     grid_params = QCDNUM.GridParams()
+    # Grid interface with defaults
+    grid_params = QCDNUM.GridParams()
 
-#     @test QCDNUM.make_grid(grid_params) == (grid_params.nx, grid_params.nq)
+    @test QCDNUM.make_grid(grid_params) == (grid_params.nx, grid_params.nq)
 
-# end
+end
 
-# @testset "Evolution interface" begin
+@testset "Evolution interface" begin
 
-#     # Initialisation
-#     QCDNUM.init()
+    # Initialisation
+    QCDNUM.init()
 
-#     # Evolution params (including grid) with defaults
-#     evolution_params = QCDNUM.EvolutionParams()
+    # Evolution params (including grid) with defaults
+    evolution_params = QCDNUM.EvolutionParams()
 
-#     input_pdf = QCDNUM.InputPDF(func=func, map=def)
+    input_pdf = QCDNUM.InputPDF(func=func, map=def)
 
-#     @test typeof(input_pdf.cfunc) == Base.CFunction
+    @test typeof(input_pdf.cfunc) == Base.CFunction
 
-#     # Evolve    
-#     eps = QCDNUM.evolve(input_pdf, evolution_params)
+    # Evolve    
+    eps = QCDNUM.evolve(input_pdf, evolution_params)
 
-#     @test typeof(eps) == Float64
-#     @test eps < 0.1
+    @test typeof(eps) == Float64
+    @test eps < 0.1
 
-# end
+end
 
-# @testset "SPLINT interface" begin
+@testset "SPLINT interface" begin
 
-#     splint_params = QCDNUM.SPLINTParams()
+    splint_params = QCDNUM.SPLINTParams()
 
-#     # Initialisation
-#     @test_nowarn QCDNUM.splint_init(splint_params)
+    # Initialisation
+    @test_nowarn QCDNUM.splint_init(splint_params)
 
-#     # Test calling init twice
-#     @test_warn "SPLINT" QCDNUM.splint_init(splint_params)
+    # Test calling init twice
+    @test_warn "SPLINT" QCDNUM.splint_init(splint_params)
     
-# end
+end

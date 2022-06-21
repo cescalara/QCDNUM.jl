@@ -3,8 +3,6 @@ using Parameters
 export GridParams, EvolutionParams
 export SPLINTParams
 
-splint_init_complete = false
-
 """
     GridParams
 
@@ -182,22 +180,11 @@ end
 """
     splint_init()
 
-High-level interface to splint initialisation that 
-handles multiple calls.
+High-level interface to splint initialisation.
 """
 function splint_init(splint_params::SPLINTParams)
-
-    if !splint_init_complete
         
-        QCDNUM.ssp_spinit(splint_params.nuser)
-
-        global splint_init_complete = true
-
-    else
-
-        @warn "SPLINT is already initialised, skipping call to QCDNUM.ssp_spinit()"
-
-    end
+    QCDNUM.ssp_spinit(splint_params.nuser)
 
     nothing
 end
