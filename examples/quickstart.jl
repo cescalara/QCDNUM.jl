@@ -124,7 +124,12 @@ evolution_params.grid_params
 # This function takes care of all the necessary steps and returns `ϵ`, which quantifies
 # the deviation due to the interpolation between grid points, and gives a sense of the
 # accuracy of the approximation. If `ϵ > 0.1`, QCDNUM will report an error.
+#
+# We can also save the QCDNUM setup that we used here for later use:
 
+QCDNUM.save_params("my_qcdnum_params.h5", evolution_params)
 
+# Of course, these can be then be loaded back:
 
-
+g = QCDNUM.load_params("my_qcdnum_params.h5")
+g

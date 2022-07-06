@@ -1,7 +1,9 @@
 using Parameters
+using HDF5
 
 export GridParams, EvolutionParams
 export SPLINTParams
+export save_params
 
 """
     GridParams
@@ -187,4 +189,114 @@ function splint_init(splint_params::SPLINTParams)
     QCDNUM.ssp_spinit(splint_params.nuser)
 
     nothing
+end
+
+"""
+    save_params(file_name, params)
+ 
+Store the QCDNUM or SPLINT parameters for reproducibility.
+"""
+function save_params(file_name::String, params::Union{EvolutionParams, SPLINTParams})
+
+    # Determine what we are storing
+    if typeof(params) == EvolutionParams
+
+        label = "evolution_params"
+
+    elseif typeof(params) == SPLINTParams
+
+        label = "splint_params"
+        
+    end
+
+    # Save
+    h5open(file_name, "w") do fid
+        
+        param_group = create_group(fid, label)
+        
+        for name in fieldnames(typeof(params))
+
+            sub_thing = getfield(params, name)
+
+            if length(fieldnames(typeof(sub_thing))) > 0
+
+                sub_group = create_group(param_group, String(name))
+                
+                for sub_name in fieldnames(typeof(sub_thing))
+
+                    sub_group[String(sub_name)] = getfield(sub_thing, sub_name)
+
+                end
+
+            else
+
+                param_group[String(name)] = sub_thing
+
+            end
+            
+        end
+
+    end
+
+    return nothing
+end
+
+
+"""
+    load_params(file_name)
+
+Load stored QCDNUM or SPLINT parameters.
+"""
+function load_params(file_name::String)
+
+    local params
+    
+    h5open(file_name, "r") do fid
+
+        # Check what is in here
+        if keys(fid)[1] == "evolution_params"
+        
+            # Rebuild grid
+            g = fid["evolution_params/grid_params"]
+
+            grid_params = GridParams(x_min=read(g["x_min"]), x_weights=read(g["x_weights"]),
+                                     x_num_bounds=read(g["x_num_bounds"]), nx=read(g["nx"]),
+                                     qq_bounds=read(g["qq_bounds"]), qq_weights=read(g["qq_weights"]),
+                                     qq_num_bounds=read(g["qq_num_bounds"]), nq=read(g["nq"]),
+                                     spline_interp=read(g["spline_interp"]))
+
+            # Rebuild evolution params
+            g = fid["evolution_params"]
+            params = EvolutionParams(order=read(g["order"]), α_S=read(g["α_S"]),
+                                     q0=read(g["q0"]), grid_params=grid_params,
+                                     n_fixed_flav=read(g["n_fixed_flav"]),
+                                     iqc=read(g["iqc"]), iqb=read(g["iqb"]),
+                                     iqt=read(g["iqt"]), weight_type=read(g["weight_type"]),
+                                     output_pdf_loc=read(g["output_pdf_loc"]))
+
+        elseif keys(fid)[1] == "splint_params"
+
+            # Rebuild spline addresses
+            g = fid["splint_params/spline_addresses"]
+            spline_addresses = SplineAddresses(F2up=read(g["F2up"]), F2dn=read(g["F2dn"]),
+                                               F3up=read(g["F3up"]), F3dn=read(g["F3dn"]),
+                                               FLup=read(g["FLup"]), FLdn=read(g["FLdn"]),
+                                               F_eP=read(g["F_eP"]), F_eM=read(g["F_eM"]))
+
+            # Rebuild splint_params
+            g = fid["splint_params"]
+            params = SPLINTParams(nuser=read(g["nuser"]), nsteps_x=read(g["nsteps_x"]),
+                                  nsteps_q=read(g["nsteps_q"]), nnodes_x=read(g["nnodes_x"]),
+                                  nnodes_q=read(g["nnodes_q"]), rs=read(g["rs"]), rscut=read(g["rscut"]),
+                                  spline_addresses=spline_addresses)
+            
+        else
+
+            @error "Contents of file not recognised."
+
+        end
+            
+    end
+
+    return params
 end
