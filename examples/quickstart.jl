@@ -66,7 +66,7 @@ end
 # the different quark species and the columns represent the `ipdf` value in the above
 # function, from 1 to 12. 
 
-##               tb  bb  cb  sb  ub  db  g   d   u   s   c   b   t
+##              tb  bb  cb  sb  ub  db  g   d   u   s   c   b   t
 map = Float64.([0., 0., 0., 0., 0.,-1., 0., 1., 0., 0., 0., 0., 0.,   # 1    
                 0., 0., 0., 0.,-1., 0., 0., 0., 1., 0., 0., 0., 0.,   # 2      
                 0., 0., 0.,-1., 0., 0., 0., 0., 0., 1., 0., 0., 0.,   # 3    
