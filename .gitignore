@@ -36,3 +36,6 @@ docs/src/splint.md
 
 # Mac OS
 .DS_Store
+
+# Generated files
+*.spl
