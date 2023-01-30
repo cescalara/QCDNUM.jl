@@ -41,14 +41,16 @@ end
     @test typeof(eps) == Float64
     @test eps < 0.1
 
-    QCDNUM.save_params("test_qcdnum_params.h5", evolution_params)
+    test_file_name = "test_qcdnum_params.h5"
 
-    loaded_params = QCDNUM.load_params("test_qcdnum_params.h5")
+    QCDNUM.save_params(test_file_name, evolution_params)
 
-    @test typeof(loaded_params) == QCDNUM.EvolutionParams
+    loaded_params = QCDNUM.load_params(test_file_name)
 
-    rm("test_qcdnum_params.h5")
-    
+    @test typeof(loaded_params["evolution_params"]) == QCDNUM.EvolutionParams
+
+    rm(test_file_name)
+
 end
 
 @testset "SPLINT interface" begin
@@ -56,18 +58,40 @@ end
     splint_params = QCDNUM.SPLINTParams()
 
     warn_string = "SPLINT is already initialised, skipping call to QCDNUM.ssp_spinit()"
-    
+
+    test_file_name = "test_splint_params.h5"
+
     # Test calling init twice
     QCDNUM.splint_init(splint_params)
-    
+
     @test_logs (:warn, warn_string) QCDNUM.splint_init(splint_params)
 
-    QCDNUM.save_params("test_splint_params.h5", splint_params)
+    QCDNUM.save_params(test_file_name, splint_params)
 
-    loaded_params = QCDNUM.load_params("test_splint_params.h5")
+    loaded_params = QCDNUM.load_params(test_file_name)
 
-    @test typeof(loaded_params) == QCDNUM.SPLINTParams
+    @test typeof(loaded_params["splint_params"]) == QCDNUM.SPLINTParams
 
-    rm("test_splint_params.h5")
-    
+    rm(test_file_name)
+
+end
+
+@testset "SPLINT + evolution interface" begin
+
+    QCDNUM.init()
+
+    evolution_params = QCDNUM.EvolutionParams()
+    splint_params = QCDNUM.SPLINTParams()
+
+    test_file_name = "test_params.h5"
+
+    QCDNUM.save_params(test_file_name, evolution_params)
+    QCDNUM.save_params(test_file_name, splint_params)
+
+    loaded_params = QCDNUM.load_params(test_file_name)
+
+    @test typeof(loaded_params) == Dict{String,Any}
+
+    rm(test_file_name)
+
 end

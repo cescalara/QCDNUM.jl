@@ -23,34 +23,34 @@ function input_pdf_func(ipdf, x)::Float64
     ## De-reference pointers
     i = ipdf[]
     xb = x[]
-    
+
     adbar = 0.1939875
     f = 0
 
     if (i == 0) # gluon is always i=0
         ag = 1.7
-        f = ag * xb^-0.1 * (1.0-xb)^5.0
-    end 
+        f = ag * xb^-0.1 * (1.0 - xb)^5.0
+    end
     if (i == 1) # down valence
         ad = 3.064320
-        f = ad * xb^0.8 * (1.0-xb)^4.0
+        f = ad * xb^0.8 * (1.0 - xb)^4.0
     end
     if (i == 2) # up valence
         au = 5.107200
-        f = au * xb^0.8 * (1.0-xb)^3.0
+        f = au * xb^0.8 * (1.0 - xb)^3.0
     end
     if (i == 3) # strange 
         f = 0.0
     end
     if (i == 4) # down sea, dbar
-        f = adbar * xb^-0.1 * (1.0-xb)^6.0
+        f = adbar * xb^-0.1 * (1.0 - xb)^6.0
     end
     if (i == 5) # up sea, ubar 
-        f = adbar * xb^-0.1 * (1.0-xb)^6.0 * (1.0-xb)
+        f = adbar * xb^-0.1 * (1.0 - xb)^6.0 * (1.0 - xb)
     end
     if (i == 6) # anti-strange, sbar
-        xdbar = adbar * xb^-0.1 * (1.0-xb)^6.0
-        xubar = adbar * xb^-0.1 * (1.0-xb)^6.0 * (1.0-xb)
+        xdbar = adbar * xb^-0.1 * (1.0 - xb)^6.0
+        xubar = adbar * xb^-0.1 * (1.0 - xb)^6.0 * (1.0 - xb)
         f = 0.2 * (xdbar + xubar)
     end
     if (i >= 7) # charm, anti-charm and heavier...
@@ -67,25 +67,25 @@ end
 # function, from 1 to 12. 
 
 ##              tb  bb  cb  sb  ub  db  g   d   u   s   c   b   t
-map = Float64.([0., 0., 0., 0., 0.,-1., 0., 1., 0., 0., 0., 0., 0.,   # 1    
-                0., 0., 0., 0.,-1., 0., 0., 0., 1., 0., 0., 0., 0.,   # 2      
-                0., 0., 0.,-1., 0., 0., 0., 0., 0., 1., 0., 0., 0.,   # 3    
-                0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0.,   # 4      
-                0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.,   # 5     
-                0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0.,   # 6     
-                0., 0.,-1., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0.,   # 7     
-                0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,   # 8     
-                0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,   # 9     
-                0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,   # 10     
-                0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,   # 11     
-                0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]); # 12
+map = Float64.([0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 1    
+    0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,   # 2      
+    0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,   # 3    
+    0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 4      
+    0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 5     
+    0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 6     
+    0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,   # 7     
+    0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 8     
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 9     
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 10     
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 11     
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]); # 12
 
 # We can see that many possible PDF parametrisations are possible with this
 # framework. QCDNUM.jl provides a simple interface, `QCDNUM.InputPDF` to keep track of these two
 # components and handle the lower-level interface between julia and QCDNUM.
 
 input_pdf = QCDNUM.InputPDF(func=input_pdf_func, map=map)
-    
+
 # We can have a look at this input PDF with the built-in plotting:
 
 #plot(input_pdf) - to be implemented...
@@ -132,4 +132,4 @@ QCDNUM.save_params("my_qcdnum_params.h5", evolution_params)
 # Of course, these can be then be loaded back:
 
 g = QCDNUM.load_params("my_qcdnum_params.h5")
-g
+g["evolution_params"]
