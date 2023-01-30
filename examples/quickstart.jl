@@ -8,7 +8,6 @@ using QCDNUM
 
 QCDNUM.init(banner=true)
 
-
 # Most likely we are using QCDNUM because we want to evolve a parton distribution function
 # (PDF) over different energy scales.
 #
@@ -66,29 +65,27 @@ end
 # the different quark species and the columns represent the `ipdf` value in the above
 # function, from 1 to 12. 
 
-##              tb  bb  cb  sb  ub  db  g   d   u   s   c   b   t
-map = Float64.([0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 1    
-    0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,   # 2      
-    0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,   # 3    
-    0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 4      
-    0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 5     
-    0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 6     
-    0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,   # 7     
-    0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 8     
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 9     
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 10     
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   # 11     
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]); # 12
+map = Float64.([
+    ##   tb  bb  cb  sb  ub  db   g   d   u   s   c   b   t
+    0, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0, 0, # 1 # U valence
+    0, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, # 2 # D valence
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, # 3 # u sea
+    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, # 4 # d sea
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, # 5 # s
+    0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, # 6 # sbar
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, # 7 # c
+    0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, # 8 # cbar
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, # 9 # b
+    0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, # 10 # bbar
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, # 11
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  # 12
+])
 
 # We can see that many possible PDF parametrisations are possible with this
 # framework. QCDNUM.jl provides a simple interface, `QCDNUM.InputPDF` to keep track of these two
 # components and handle the lower-level interface between julia and QCDNUM.
 
 input_pdf = QCDNUM.InputPDF(func=input_pdf_func, map=map)
-
-# We can have a look at this input PDF with the built-in plotting:
-
-#plot(input_pdf) - to be implemented...
 
 # To evolve this input scale, we need to define a number of evolution parameters,
 # handled by the `QCDNUM.EvolutionParams` interface. 
@@ -124,7 +121,37 @@ evolution_params.grid_params
 # This function takes care of all the necessary steps and returns `ϵ`, which quantifies
 # the deviation due to the interpolation between grid points, and gives a sense of the
 # accuracy of the approximation. If `ϵ > 0.1`, QCDNUM will report an error.
-#
+
+# We can now access and plot the evolved PDF at the scale of our choice.
+
+q2 = 300.0 # GeV^2
+n_additional_pdfs = 0
+err_check_flag = 1 # Run with error checking
+
+x_grid = range(1e-3, stop=1, length=100)
+itype = evolution_params.output_pdf_loc
+
+## Select pdf with index according to above definition
+## NB -> in Julia indexing starts from 1
+g_pdf = [QCDNUM.allfxq(itype, x, q2, n_additional_pdfs, err_check_flag)[1] for x in x_grid]
+dv_pdf = [QCDNUM.allfxq(itype, x, q2, n_additional_pdfs, err_check_flag)[2] for x in x_grid]
+uv_pdf = [QCDNUM.allfxq(itype, x, q2, n_additional_pdfs, err_check_flag)[3] for x in x_grid]
+
+# Let's also compare these with those from the input PDFs at the starting scale
+
+using Plots
+
+plot(x_grid, [input_pdf.func(0, x) for x in x_grid], label="x g(x) - Q2 = $evolution_params.q0",
+    lw=3, linestyle=:dash, alpha=0.5, color=:black)
+plot!(x_grid, [input_pdf.func(1, x) for x in x_grid], label="x dv(x) - Q2 = $evolution_params.q0",
+    lw=3, linestyle=:dash, alpha=0.5, color=:red)
+plot!(x_grid, [input_pdf.func(2, x) for x in x_grid], label="x uv(x) - Q2 = $evolution_params.q0",
+    lw=3, linestyle=:dash, alpha=0.5, color=:green)
+plot(x_grid, g_pdf, label="x g(x) - Q2 = $q2", lw=3, color=:black)
+plot!(x_grid, dv_pdf, label="x dv(x) - Q2 = $q2", lw=3, color=:red)
+plot!(x_grid, uv_pdf, label="x uv(x) - Q2 = $q2", lw=3, color=:green)
+plot!(xlabel="x")
+
 # We can also save the QCDNUM setup that we used here for later use:
 
 QCDNUM.save_params("my_qcdnum_params.h5", evolution_params)
