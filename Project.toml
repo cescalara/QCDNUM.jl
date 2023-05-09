@@ -11,6 +11,8 @@ QCDNUM_jll = "4f99f0f9-6eee-532a-a65d-722344444835"
 
 [compat]
 julia = "1"
+HDF5 = "0.16"
+Parameters = "0.12"
 
 [extras]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
