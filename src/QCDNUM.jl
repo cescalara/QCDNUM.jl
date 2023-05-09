@@ -10,5 +10,6 @@ include("evolution.jl")
 include("interpolation.jl")
 include("zmstf.jl")
 include("splint/splint.jl")
+include("interface.jl")
 
 end # QCDNUM

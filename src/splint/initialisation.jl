@@ -1,3 +1,5 @@
+_splint_init_complete = false
+
 """
     isp_spvers()
 
@@ -23,7 +25,17 @@ function ssp_spinit(nuser::Integer)
 
     nuser = Ref{Int32}(nuser)
 
-    @ccall ssp_spinit_(nuser::Ref{Int32})::Nothing
+    if !_splint_init_complete
+        
+        @ccall ssp_spinit_(nuser::Ref{Int32})::Nothing
+
+        global _splint_init_complete = true
+
+    else
+
+        @warn "SPLINT is already initialised, skipping call to QCDNUM.ssp_spinit()"
+
+    end
     
     nothing
 end

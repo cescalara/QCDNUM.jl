@@ -41,7 +41,7 @@ include("pdf_functions.jl")
     ipdf = 1
 
     # Initialise
-    QCDNUM.ssp_spinit(100)
+    @test_nowarn QCDNUM.ssp_spinit(100)
     ver = QCDNUM.isp_spvers()
     @test typeof(ver) == Int32
     @test ver > 20210000
