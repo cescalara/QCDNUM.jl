@@ -100,7 +100,7 @@ fieldnames(QCDNUM.EvolutionParams)
 # `?QCDNUM.EvolutionParams.α_S`
 #
 # Here, let's work with the default values. This means that out input PDF is defined for
-# a starting scale of evolution_params.q0 with a coupling constant of evolution_params.α_S...
+# a starting scale of `evolution_params.q0` with a coupling constant of `evolution_params.α_S`
 
 evolution_params = QCDNUM.EvolutionParams()
 
@@ -147,10 +147,10 @@ plot!(x_grid, [input_pdf.func(1, x) for x in x_grid], label="x dv(x) - Q2 = $evo
     lw=3, linestyle=:dash, alpha=0.5, color=:red)
 plot!(x_grid, [input_pdf.func(2, x) for x in x_grid], label="x uv(x) - Q2 = $evolution_params.q0",
     lw=3, linestyle=:dash, alpha=0.5, color=:green)
-plot(x_grid, g_pdf, label="x g(x) - Q2 = $q2", lw=3, color=:black)
+plot!(x_grid, g_pdf, label="x g(x) - Q2 = $q2", lw=3, color=:black)
 plot!(x_grid, dv_pdf, label="x dv(x) - Q2 = $q2", lw=3, color=:red)
 plot!(x_grid, uv_pdf, label="x uv(x) - Q2 = $q2", lw=3, color=:green)
-plot!(xlabel="x")
+plot!(xlabel="x", yaxis=:log)
 
 # We can also save the QCDNUM setup that we used here for later use:
 
