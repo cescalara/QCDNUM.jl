@@ -143,6 +143,7 @@ using Plots
 
 plot(x_grid, [input_pdf.func(0, x) for x in x_grid], label="x g(x) - Q2 = $evolution_params.q0",
     lw=3, linestyle=:dash, alpha=0.5, color=:black)
+plot!(x_grid, [input_pdf.func(1, x) for x in x_grid], label="x dv(x) - Q2 = $evolution_params.q0",
     lw=3, linestyle=:dash, alpha=0.5, color=:red)
 plot!(x_grid, [input_pdf.func(2, x) for x in x_grid], label="x uv(x) - Q2 = $evolution_params.q0",
     lw=3, linestyle=:dash, alpha=0.5, color=:green)
