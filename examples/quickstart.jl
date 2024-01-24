@@ -150,7 +150,7 @@ plot!(x_grid, [input_pdf.func(2, x) for x in x_grid], label="x uv(x) - Q2 = $evo
 plot!(x_grid, g_pdf, label="x g(x) - Q2 = $q2", lw=3, color=:black)
 plot!(x_grid, dv_pdf, label="x dv(x) - Q2 = $q2", lw=3, color=:red)
 plot!(x_grid, uv_pdf, label="x uv(x) - Q2 = $q2", lw=3, color=:green)
-plot!(xlabel="x", yaxis=:log)
+plot!(xlabel="x", yscale=:log)
 
 # We can also save the QCDNUM setup that we used here for later use:
 
