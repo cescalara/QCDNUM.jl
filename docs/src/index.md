@@ -2,7 +2,7 @@
 
 Fast QCD evolution and convolution: QCDNUM.jl solves the [DGLAP evolution equations](https://en.wikipedia.org/wiki/DGLAP_evolution_equations), which describe the evolution of parton distribution functions with varying energy scales. 
 
-Hadrons, such as protons and neutrons, are made up of quarks held together by the strong force. At high energy scales, the valence quarks that define these hadrons exist in a sea of virtual quarks and gluons. The parton distribution functions (often abbreviated to PDFs) describe this structure and are of fundamental importance to our understanding of quantum chromodynamics (QCD), as well as its application to a rnage of processes, from LHC physics to the development of cosmic ray air showers in the Earth's atmosphere. PDFs can be extracted from accelerator measurements in which hadrons are probed through collisions with electrons, and the DGLAP equations are widely used for this purpose.
+Hadrons, such as protons and neutrons, are made up of quarks held together by the strong force. At high energy scales, the valence quarks that define these hadrons exist in a sea of virtual quarks and gluons. The parton distribution functions (often abbreviated to PDFs) describe this structure and are of fundamental importance to our understanding of quantum chromodynamics (QCD), as well as its application to a range of processes, from LHC physics to the development of cosmic ray air showers in the Earth's atmosphere. PDFs can be extracted from accelerator measurements in which hadrons are probed through collisions with electrons, and the DGLAP equations are widely used for this purpose.
 
 QCDNUM.jl is a Julia wrapper for Michiel Botje's [QCDNUM](https://www.nikhef.nl/~h24/qcdnum/), written in Fortran77. The Julia interface offers several interesting advantages:
 * Easily install and use the original QCDNUM without having to compile it on your system - all set up is taken care of behind the scenes in a cross-platform way thanks to [BinaryBuilder](https://binarybuilder.org) and [Yggdrasil](https://github.com/JuliaPackaging/Yggdrasil)
@@ -18,7 +18,7 @@ The source code, along with Julia scripts for all examples can be found in the [
 
 This documentation gives an overview of the Julia implementation. More details can be found in the [QCDNUM docs](https://www.nikhef.nl/~h24/qcdnum/).
 
-If you are interested in extracting parton densities from accelerator data, you may want to check out our [PartonDensity.jl](https://github.com/cescalara/PartonDensity.jl) project.
+If you are interested in extracting parton densities from accelerator data, you may also want to check out our [PartonDensity.jl](https://github.com/cescalara/PartonDensity.jl) project.
 
 ## Citation
 
