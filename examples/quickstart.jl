@@ -141,16 +141,19 @@ uv_pdf = [QCDNUM.allfxq(itype, x, q2, n_additional_pdfs, err_check_flag)[3] for 
 
 using Plots
 
-plot(x_grid, [input_pdf.func(0, x) for x in x_grid], label="x g(x) - Q2 = $evolution_params.q0",
+q0 = evolution_params.q0
+p1 = plot(x_grid, [input_pdf.func(0, x) for x in x_grid], label="x g(x) - Q2 = $q0",
     lw=3, linestyle=:dash, alpha=0.5, color=:black)
-plot!(x_grid, [input_pdf.func(1, x) for x in x_grid], label="x dv(x) - Q2 = $evolution_params.q0",
+plot!(x_grid, [input_pdf.func(1, x) for x in x_grid], label="x dv(x) - Q2 = $q0",
     lw=3, linestyle=:dash, alpha=0.5, color=:red)
-plot!(x_grid, [input_pdf.func(2, x) for x in x_grid], label="x uv(x) - Q2 = $evolution_params.q0",
+plot!(x_grid, [input_pdf.func(2, x) for x in x_grid], label="x uv(x) - Q2 = $q0",
     lw=3, linestyle=:dash, alpha=0.5, color=:green)
-plot!(x_grid, g_pdf, label="x g(x) - Q2 = $q2", lw=3, color=:black)
+
+p2 = plot(x_grid, g_pdf, label="x g(x) - Q2 = $q2", lw=3, color=:black)
 plot!(x_grid, dv_pdf, label="x dv(x) - Q2 = $q2", lw=3, color=:red)
 plot!(x_grid, uv_pdf, label="x uv(x) - Q2 = $q2", lw=3, color=:green)
-plot!(xlabel="x", yscale=:log)
+
+plot(p1, p2, layout=(1, 2), xlabel="x")
 
 # We can also save the QCDNUM setup that we used here for later use:
 
