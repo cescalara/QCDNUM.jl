@@ -1,15 +1,13 @@
 using QCDNUM
 using Test
 
-include("pdf_functions.jl")
-
 @testset "SPLINT" begin
 
     # Initialise
     QCDNUM.qcinit(-6, "")
-    
+
     # C-pointer to func
-    func_c = @cfunction($func, Float64, (Ref{Int32}, Ref{Float64}))
+    func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
 
     # Initialise
     QCDNUM.qcinit(-6, "")
@@ -36,7 +34,7 @@ include("pdf_functions.jl")
 
     # SPLINT
     func_sp_c = @cfunction($func_sp, Float64, (Ref{Int32}, Ref{Int32}, Ref{UInt8}))
-    
+
     iset = 1
     ipdf = 1
 
@@ -73,7 +71,7 @@ include("pdf_functions.jl")
 
     # Store extra info
     @test QCDNUM.ssp_spsetval(iasp, 1, 123456.789) == nothing
-    
+
     # Save and load from file
     @test QCDNUM.ssp_spdump(iasp, "test_spline.dat") == nothing
     sleep(1)
@@ -82,7 +80,7 @@ include("pdf_functions.jl")
     @test QCDNUM.dsp_spgetval(iasp_read, 1) == 123456.789
 
     rm("test_spline.dat")
-    
+
     # Evalute function and integral
     x = 0.1
     q = 100.0
@@ -97,7 +95,7 @@ include("pdf_functions.jl")
     rs = 370.0
     np = 4
     integral = QCDNUM.dsp_ints2(iasp, x1, x2, q1, q2, rs, np)
-    @test isapprox(integral, 3.709, rtol = 0.01)
+    @test isapprox(integral, 3.709, rtol=0.01)
 
     # Copy nodes
     u_nodes = QCDNUM.ssp_unodes(iasp, nu, nu)
@@ -117,34 +115,34 @@ include("pdf_functions.jl")
     rsc_max = QCDNUM.dsp_rsmax(iasp, rsc)
     @test rsc == 0.0
     @test rsc_max == 0.0
-    
+
     # Memory checks
     nw = QCDNUM.isp_spsize(iasp)
     nw_tot = QCDNUM.isp_spsize(0)
     @test nw > 0
     @test nw < nw_tot
-    
+
     @test QCDNUM.ssp_erase(iasp) == nothing
     nw = QCDNUM.isp_spsize(iasp)
     @test nw == 0
-    
+
     # 1D spline
     iasp = QCDNUM.isp_sxmake(5)
     @test typeof(iasp) == Int32
-    
+
     iasp = QCDNUM.isp_sqmake(5)
     @test typeof(iasp) == Int32
 
     # Fast strcuture function splines
-    c = [0., 0., 1., 0., 1., 0., 0., 0., 1., 0., 1., 0., 0.]
+    c = [0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0]
 
     ia = QCDNUM.isp_s2make(20, 20)
     xnd = QCDNUM.ssp_unodes(ia, 20, 0)
     qnd = QCDNUM.ssp_vnodes(ia, 20, 0)
-    QCDNUM.ssp_erase(ia);
+    QCDNUM.ssp_erase(ia)
 
     iasf = QCDNUM.isp_s2user(xnd, 20, qnd, 20)
     @test iasf > 0
     @test QCDNUM.ssp_s2f123(iasf, 1, c, 1, 0.0) == nothing
-    
+
 end

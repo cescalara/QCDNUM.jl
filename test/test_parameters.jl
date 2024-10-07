@@ -1,8 +1,6 @@
 using QCDNUM
 using Test
 
-include("pdf_functions.jl")
-
 @testset "Parameters" begin
 
     # Initialisation
@@ -19,7 +17,7 @@ include("pdf_functions.jl")
     catch e
         @test isa(e, DomainError)
     end
-    
+
     @test QCDNUM.setalf(0.364, 2.0) == nothing
     alfs, r2 = QCDNUM.getalf()
     @test alfs == 0.364
@@ -45,7 +43,7 @@ include("pdf_functions.jl")
 
     # VFNS & FFNS
     for nfix in [0, 1, 3, 4, 5, 6]
-        
+
         @test QCDNUM.setcbt(nfix, 5, 10, 30) == nothing
 
         nfix_out, q2c, q2b, q2t = QCDNUM.getcbt()
@@ -58,12 +56,12 @@ include("pdf_functions.jl")
             @test q2c == QCDNUM.qfrmiq(5)
             @test q2b == QCDNUM.qfrmiq(10)
             @test q2t == QCDNUM.qfrmiq(30)
-            
+
         end
 
     end
 
-    try 
+    try
         QCDNUM.setcbt(2, 5, 10, 30)
     catch e
         @test isa(e, DomainError)
@@ -76,12 +74,12 @@ include("pdf_functions.jl")
 
         nfix_out, q2c, q2b, q2t = QCDNUM.getcbt()
 
-        @test nfix_out == - nfix
+        @test nfix_out == -nfix
 
         @test q2c == 10.0
         @test q2b == 100.0
         @test q2t == 1000.0
-        
+
     end
 
     # Number of active flavours in test pdf set
@@ -120,8 +118,8 @@ include("pdf_functions.jl")
     for igroup in 1:6
         @test QCDNUM.keygrp(1, igroup) == QCDNUM.keygrp(0, igroup)
     end
-    
+
     @test QCDNUM.pushcp() == nothing
-    @test QCDNUM.pullcp() == nothing    
-    
+    @test QCDNUM.pullcp() == nothing
+
 end

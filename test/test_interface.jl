@@ -1,8 +1,6 @@
 using QCDNUM
 using Test
 
-include("pdf_functions.jl")
-
 @testset "Initialisation" begin
 
     QCDNUM.init()

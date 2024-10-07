@@ -1,14 +1,12 @@
 using QCDNUM
 using Test
 
-include("pdf_functions.jl")
-
 @testset "Evolution & interpolation" begin
 
     # C-pointer to func
-    func_c = @cfunction($func, Float64, (Ref{Int32}, Ref{Float64}))
-    func_ext_c = @cfunction($func_ext, Float64, (Ref{Int32}, Ref{Float64}, Ref{Float64}, Ref{UInt8}))
-    func_usr_c = @cfunction($func_usr, Float64, (Ref{Int32}, Ref{Float64}, Ref{Float64}, Ref{UInt8}))
+    func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
+    func_ext_c = @cfunction(func_ext, Float64, (Ref{Int32}, Ref{Float64}, Ref{Float64}, Ref{UInt8}))
+    func_usr_c = @cfunction(func_usr, Float64, (Ref{Int32}, Ref{Float64}, Ref{Float64}, Ref{UInt8}))
 
     # Initialise
     QCDNUM.qcinit(-6, "")
@@ -40,7 +38,7 @@ include("pdf_functions.jl")
     # Interpolation
     x = 1e-3
     q = 1e3
-    c = [0., 0., 1., 0., 1., 0., 0., 0., 1., 0., 1., 0., 0.]
+    c = [0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0]
 
     pdf = QCDNUM.allfxq(1, x, q, 0, 1)
     @test pdf[1] == 0.0
@@ -48,10 +46,10 @@ include("pdf_functions.jl")
 
     pdfs_xq = QCDNUM.sumfxq(1, c, 0, x, q, 1)
     @test pdfs_xq > 0
-    
+
     ix = QCDNUM.ixfrmx(x)
     iq = QCDNUM.iqfrmq(q)
-    
+
     pdf = QCDNUM.allfij(1, ix, iq, 0, 1)
     @test pdf[1] == 0.0
     @test size(pdf)[1] == 13
@@ -59,11 +57,11 @@ include("pdf_functions.jl")
     pdfs_ij = QCDNUM.sumfij(1, c, 0, ix, iq, 1)
     @test pdfs_ij > 0
     @test isapprox(pdfs_ij, pdfs_xq, rtol=0.1)
-    
+
     for id in 0:12
         pdf_ij = QCDNUM.bvalij(1, id, ix, iq, 1)
         pdf_xq = QCDNUM.bvalxq(1, id, x, q, 1)
-        @test isapprox(pdf_ij, pdf_xq, rtol=0.1)        
+        @test isapprox(pdf_ij, pdf_xq, rtol=0.1)
     end
 
     for id in -6:6
@@ -96,7 +94,7 @@ include("pdf_functions.jl")
 
     # PDF copy
     QCDNUM.pdfcpy(1, 2)
-    
+
     ntables = QCDNUM.nptabs(2)
     @test ntables == 13
 
@@ -128,17 +126,17 @@ include("pdf_functions.jl")
     # PDF copy via usrpdf
     epsi = QCDNUM.usrpdf(func_usr_c, 4, 12, 0.0)
     @test epsi < 0.05
-    
+
     ntables = QCDNUM.nptabs(4)
     @test ntables == 13
 
     type = QCDNUM.ievtyp(4)
     @test type == 5
-    
+
     for id in 0:12
         pdf_ij_1 = QCDNUM.bvalij(1, id, ix, iq, 1)
         pdf_ij_4 = QCDNUM.bvalij(4, id, ix, iq, 1)
-        @test isapprox(pdf_ij_1, pdf_ij_4, rtol=0.001)        
+        @test isapprox(pdf_ij_1, pdf_ij_4, rtol=0.001)
     end
 
     # Fast interpolation - list

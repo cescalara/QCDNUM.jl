@@ -1,10 +1,8 @@
 using QCDNUM
 using Test
 
-include("pdf_functions.jl")
-
 @testset "Structure functions" begin
-    
+
     # C-pointer to func
     func_c = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
 
@@ -37,15 +35,15 @@ include("pdf_functions.jl")
     eps = QCDNUM.evolfg(1, func_c, def, iq0)
     @test typeof(eps) == Float64
 
-    Au = 4.0/9.0 
-    Ad = 1.0/9.0
-    w = [0., Ad, Au, Ad, Au, Ad, 0., Ad, Au, Ad, Au, Ad, 0.]
+    Au = 4.0 / 9.0
+    Ad = 1.0 / 9.0
+    w = [0.0, Ad, Au, Ad, Au, Ad, 0.0, Ad, Au, Ad, Au, Ad, 0.0]
     x = 1e-3
     q = 1e3
-    
+
     for istf in 1:4
         f = QCDNUM.zmstfun(istf, w, [x], [q], 1, 0)
-        @test typeof(f[1]) == Float64 
+        @test typeof(f[1]) == Float64
     end
-    
+
 end
