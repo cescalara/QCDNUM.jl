@@ -114,9 +114,11 @@ evolution_params.grid_params
 # in the documentation.
 
 # Now, we have everything we need to evolve the PDF over the specified grid. This is all
-# taken care of with the `QCDNUM.evolve` function.
+# taken care of with the `QCDNUM.evolve` function. We will need to wrap our PDF function
+# using the `@cfunction` macro to pass it to QCDNUM.
 
-ϵ = QCDNUM.evolve(input_pdf, evolution_params)
+cfunc = @cfunction(input_pdf.func, Float64, (Ref{Int32}, Ref{Float64}))
+ϵ = QCDNUM.evolve(input_pdf, cfunc, evolution_params)
 
 # This function takes care of all the necessary steps and returns `ϵ`, which quantifies
 # the deviation due to the interpolation between grid points, and gives a sense of the

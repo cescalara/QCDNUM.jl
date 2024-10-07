@@ -114,8 +114,6 @@ Struct containing all necessary info to pass a PDF
 @with_kw struct InputPDF
     "input PDF function specified in julia"
     func::Function
-    "C-stype pointer to input func to pass to QCDNUM"
-    cfunc::Base.CFunction = @cfunction($func, Float64, (Ref{Int32}, Ref{Float64}))
     "map of quark species to input distribution"
     map::Array{Float64}
 end
@@ -159,7 +157,7 @@ end
 
 High-level interface to QCD evolution with QCDNUM.
 """
-function evolve(input_pdf::InputPDF, evolution_params::EvolutionParams)
+function evolve(input_pdf::InputPDF, cfunc::Union{Base.CFunction,Ptr{Nothing}}, evolution_params::EvolutionParams)
 
     p = evolution_params
 
@@ -178,7 +176,7 @@ function evolve(input_pdf::InputPDF, evolution_params::EvolutionParams)
 
     iq0 = QCDNUM.iqfrmq(p.q0)
 
-    eps = QCDNUM.evolfg(p.output_pdf_loc, input_pdf.cfunc, input_pdf.map, iq0)
+    eps = QCDNUM.evolfg(p.output_pdf_loc, cfunc, input_pdf.map, iq0)
 
     return eps
 end
