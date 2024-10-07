@@ -117,7 +117,7 @@ evolution_params.grid_params
 # taken care of with the `QCDNUM.evolve` function. We will need to wrap our PDF function
 # using the `@cfunction` macro to pass it to QCDNUM.
 
-cfunc = @cfunction(input_pdf.func, Float64, (Ref{Int32}, Ref{Float64}))
+cfunc = @cfunction(input_pdf_func, Float64, (Ref{Int32}, Ref{Float64}))
 ϵ = QCDNUM.evolve(input_pdf, cfunc, evolution_params)
 
 # This function takes care of all the necessary steps and returns `ϵ`, which quantifies

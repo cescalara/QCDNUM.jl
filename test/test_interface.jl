@@ -31,7 +31,7 @@ end
 
     input_pdf = QCDNUM.InputPDF(func=func, map=def)
 
-    cfunc = @cfunction(input_pdf.func, Float64, (Ref{Int32}, Ref{Float64}))
+    cfunc = @cfunction(func, Float64, (Ref{Int32}, Ref{Float64}))
 
     # Evolve    
     eps = QCDNUM.evolve(input_pdf, cfunc, evolution_params)
