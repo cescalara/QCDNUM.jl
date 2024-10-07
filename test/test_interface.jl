@@ -31,10 +31,10 @@ end
 
     input_pdf = QCDNUM.InputPDF(func=func, map=def)
 
-    @test typeof(input_pdf.cfunc) == Base.CFunction
+    cfunc = @cfunction(input_pdf.func, Float64, (Ref{Int32}, Ref{Float64}))
 
     # Evolve    
-    eps = QCDNUM.evolve(input_pdf, evolution_params)
+    eps = QCDNUM.evolve(input_pdf, cfunc, evolution_params)
 
     @test typeof(eps) == Float64
     @test eps < 0.1
